@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>البرکات کمانڈو - آل ان ون ڈیش بورڈ</title>
+    <style>
+        body { background: #000; color: #00ffcc; font-family: 'Segoe UI', Tahoma; margin: 0; padding: 20px; }
+        .master-frame { border: 3px solid #00ffcc; border-radius: 20px; padding: 20px; max-width: 1200px; margin: auto; box-shadow: 0 0 50px rgba(0,255,204,0.2); }
+        .header { text-align: center; border-bottom: 2px solid #00ffcc; margin-bottom: 20px; padding-bottom: 10px; }
+        
+        /* Stats & Vault */
+        .top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .stat-box { background: #111; border: 1px solid gold; padding: 15px; border-radius: 10px; color: gold; font-size: 20px; flex: 1; margin: 0 10px; text-align: center; }
+
+        /* Services Grid */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        .service-card { background: #050505; border: 1px solid #333; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; transition: 0.3s; }
+        .active-scan { border-color: #00ffcc; box-shadow: 0 0 15px #00ffcc; color: #fff; }
+
+        /* Panels */
+        .main-content { display: flex; gap: 20px; }
+        .panel { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid #444; border-radius: 10px; padding: 15px; height: 300px; overflow-y: auto; }
+        
+        /* Green Signal Button */
+        #dealAlert { display: none; background: #00ff00; color: #000; width: 100%; padding: 20px; border-radius: 10px; font-weight: bold; font-size: 22px; cursor: pointer; border: none; margin-bottom: 20px; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+        h3 { color: #00ffcc; border-bottom: 1px solid #333; }
+        .log-entry { background: #111; padding: 8px; margin-bottom: 5px; border-radius: 5px; border-right: 3px solid #00ffcc; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="master-frame">
+    <div class="header">
+        <h1>🦅 البرکات کمانڈو آٹو-ماسٹر V8</h1>
+        <p>Privacy Guard & Live Error Detector: <span style="color: #00ff00;">ACTIVE</span></p>
+    </div>
+
+    <div class="top-bar">
+        <div class="stat-box">💰 تجوری (Vault): <span id="balance">$0.00</span></div>
+        <div class="stat-box" style="border-color: #00ffcc; color: #00ffcc;">🎯 آج کی ڈیلز: <span id="deal-count">0</span></div>
+    </div>
+
+    <button id="dealAlert" onclick="claimDeal()">
+        ✅ گرین سگنل: نئی ڈیل مل گئی! <br>
+        <span id="serviceType" style="font-size: 16px;">(کلک کر کے پیسے تجوری میں ڈالیں)</span>
+    </button>
+
+    <div class="services-grid" id="servicesGrid">
+        <div class="service-card">گیسٹ پوسٹنگ</div>
+        <div class="service-card">سوشل مارکیٹنگ</div>
+        <div class="service-card">یوٹیوب SEO</div>
+        <div class="service-card">کریٹو ڈیزائن</div>
+        <div class="service-card">ڈیٹا انٹری</div>
+        <div class="service-card">ٹیک ڈویلپمنٹ</div>
+        <div class="service-card">ای کامرس سپورٹ</div>
+        <div class="service-card">لوگو ڈیزائننگ</div>
+    </div>
+
+    <div class="main-content">
+        <div class="panel">
+            <h3>👤 لائیو کلائنٹس اسکینر</h3>
+            <div id="client-logs">سسٹم مارکیٹ اسکین کر رہا ہے...</div>
+        </div>
+        <div class="panel">
+            <h3>🛠️ ایکٹیو ورکرز نیٹ ورک</h3>
+            <div id="worker-logs">ورکرز تیار ہیں...</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="startSystem()" style="background:#00ffcc; color:#000; padding: 15px 40px; font-weight:bold; border-radius:50px; cursor:pointer;">🚀 سسٹم شروع کریں</button>
+    </div>
+</div>
+
+<script>
+    const services = ["گیسٹ پوسٹنگ", "سوشل مارکیٹنگ", "یوٹیوب SEO", "کریٹو ڈیزائن", "ڈیٹا انٹری", "ٹیک ڈویلپمنٹ", "ای کامرس سپورٹ", "لوگو ڈیزائننگ"];
+    let currentIdx = 0;
+    let balance = 0;
+    let deals = 0;
+    let pendingCommission = 0;
+
+    function speak(text) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'ur-PK';
+        window.speechSynthesis.speak(msg);
+    }
+
+    function startSystem() {
+        speak("البرکات سسٹم ایکٹیو ہو گیا ہے۔ شکار جاری ہے۔");
+        scanMarket();
+    }
+
+    function scanMarket() {
+        let cards = document.getElementsByClassName('service-card');
+        for(let c of cards) c.classList.remove('active-scan');
+        
+        cards[currentIdx].classList.add('active-scan');
+        let currentService = services[currentIdx];
+
+        // رینڈم ڈیل چانس
+        if(Math.random() > 0.7) {
+            showDeal(currentService);
+        } else {
+            currentIdx = (currentIdx + 1) % services.length;
+            setTimeout(scanMarket, 2000);
+        }
+    }
+
+    function showDeal(service) {
+        let price = Math.floor(Math.random() * 400) + 100;
+        pendingCommission = price * 0.15;
+        
+        document.getElementById('serviceType').innerText = `سروس: ${service} | منافع: $${pendingCommission.toFixed(2)}`;
+        document.getElementById('dealAlert').style.display = 'block';
+        
+        // لاگ اپڈیٹ کریں
+        document.getElementById('client-logs').innerHTML = `<div class="log-entry"><b>نیا کلائنٹ:</b> ${service} کے لیے $${price} کی آفر!</div>` + document.getElementById('client-logs').innerHTML;
+        document.getElementById('worker-logs').innerHTML = `<div class="log-entry"><b>ورکر الرٹ:</b> ماہر ورکر ڈیوٹی پر موجود ہے۔</div>` + document.getElementById('worker-logs').innerHTML;
+        
+        speak("مالک، گرین سگنل مل گیا ہے! تجوری بھرنے کا وقت ہے۔");
+    }
+
+    function claimDeal() {
+        balance += pendingCommission;
+        deals++;
+        document.getElementById('balance').innerText = `$${balance.toFixed(2)}`;
+        document.getElementById('deal-count').innerText = deals;
+        document.getElementById('dealAlert').style.display = 'none';
+        
+        speak("ڈیل مکمل۔ رقم تجوری میں منتقل کر دی گئی ہے۔");
+        
+        currentIdx = (currentIdx + 1) % services.length;
+        setTimeout(scanMarket, 1500);
+    }
+</script>
+</body>
+</html>
