@@ -2,132 +2,75 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - الٹرا ڈیش بورڈ</title>
+    <title>البرکات کمانڈو - ماسٹر پلیٹ فارم</title>
     <style>
-        :root { --neon: #00ffcc; --gold: #ffcc00; --glass: rgba(255, 255, 255, 0.05); }
-        body { background: #050505; color: #e0e0e0; font-family: 'Segoe UI', system-ui; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        :root { --neon: #00ffcc; --gold: #ffd700; --bg: #050505; --card: #111216; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', Tahoma; margin: 0; overflow: hidden; }
         
-        /* پروفیشنل سائڈ بار */
-        .sidebar { width: 260px; background: #0d0d0d; border-left: 1px solid #222; display: flex; flex-direction: column; padding: 25px; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
-        .logo { font-size: 24px; font-weight: 800; color: var(--neon); letter-spacing: 1px; margin-bottom: 40px; text-shadow: 0 0 15px rgba(0,255,204,0.3); }
-        .nav-btn { padding: 14px 20px; margin: 8px 0; border-radius: 12px; cursor: pointer; transition: 0.3s; color: #aaa; display: flex; align-items: center; gap: 12px; font-weight: 500; }
-        .nav-btn:hover { background: var(--glass); color: var(--neon); }
-        .nav-btn.active { background: var(--neon); color: #000; font-weight: bold; }
+        /* گیٹ وے اسکرین */
+        #gateway { display: flex; height: 100vh; justify-content: center; align-items: center; gap: 30px; background: radial-gradient(circle, #111 0%, #000 100%); }
+        .gate-card { width: 350px; padding: 50px; background: var(--card); border: 2px solid #222; border-radius: 40px; text-align: center; cursor: pointer; transition: 0.5s; }
+        .gate-card:hover { border-color: var(--neon); box-shadow: 0 0 50px rgba(0,255,204,0.2); transform: scale(1.05); }
 
-        /* مین انٹرفیس */
-        .main { flex: 1; display: flex; flex-direction: column; background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%); }
-        .header { padding: 20px 40px; background: rgba(13, 13, 13, 0.7); backdrop-filter: blur(10px); display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
+        /* مین ایپ سٹرکچر */
+        #app-shell { display: none; height: 100vh; flex-direction: row; }
+        .sidebar { width: 280px; background: #08090b; border-left: 1px solid #1a1c23; padding: 30px 15px; display: flex; flex-direction: column; }
+        .main-view { flex: 1; display: flex; flex-direction: column; background: #0a0b0e; overflow-y: auto; }
         
-        /* رائٹنگ ڈیسک (AI Brain) */
-        .workspace { padding: 40px; flex: 1; overflow-y: auto; }
-        .ai-container { background: var(--glass); border: 1px solid #333; border-radius: 25px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .display-area { width: 100%; height: 250px; background: rgba(0,0,0,0.3); border: 1px solid #444; border-radius: 15px; padding: 20px; color: #fff; font-size: 18px; margin-bottom: 20px; line-height: 1.6; }
-        
-        /* کنٹرول بٹنز */
-        .controls { display: flex; gap: 20px; justify-content: center; }
-        .btn { padding: 15px 35px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; transition: 0.4s; font-size: 16px; text-transform: uppercase; }
-        .btn-mic { background: var(--gold); box-shadow: 0 0 20px rgba(255,204,0,0.2); }
-        .btn-magic { background: var(--neon); box-shadow: 0 0 20px rgba(0,255,204,0.2); }
-        .btn:active { transform: scale(0.92); }
+        /* بٹن اور نیویگیشن */
+        .nav-item { padding: 18px; margin: 8px 0; border-radius: 15px; cursor: pointer; transition: 0.3s; color: #888; display: flex; align-items: center; gap: 12px; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--neon); }
+        .nav-item.active { background: var(--neon); color: #000; font-weight: bold; }
 
-        /* لنک سیکشن */
-        .link-vault { margin-top: 30px; padding: 20px; border-top: 1px solid #222; }
-        .link-input { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; color: var(--neon); width: 80%; }
+        /* دکان کے سیکشن */
+        .header { padding: 25px 40px; background: rgba(13,14,18,0.9); border-bottom: 1px solid #1a1c23; display: flex; justify-content: space-between; align-items: center; }
+        .workspace { padding: 40px; }
+        .store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
+        .store-item { background: var(--card); padding: 25px; border-radius: 25px; border: 1px solid #222; }
 
-        #status-msg { text-align: center; color: var(--gold); font-size: 14px; margin-top: 15px; font-style: italic; }
+        /* AI سمارٹ رائٹر */
+        .ai-desk { background: #0f1115; border-radius: 30px; border: 1px solid #222; padding: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .smart-area { width: 100%; height: 250px; background: #050505; border: 1px solid #1a1c23; border-radius: 20px; padding: 20px; color: #fff; font-size: 18px; line-height: 1.6; outline: none; margin-bottom: 20px; }
+
+        .btn-group { display: flex; gap: 15px; justify-content: center; }
+        .btn { padding: 15px 35px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .btn-mic { background: var(--gold); color: #000; }
+        .btn-magic { background: var(--neon); color: #000; }
+        .btn-back { background: #ff4444; color: white; margin-top: auto; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo">🦅 البرکات کمانڈو</div>
-        <div class="nav-btn active">📊 ڈیش بورڈ</div>
-        <div class="nav-btn">📁 پورٹ فولیو</div>
-        <div class="nav-btn">✉️ پیغامات</div>
-        <div class="nav-btn">💸 فنانس</div>
-        <div style="margin-top: auto;">
-            <button onclick="logout()" style="width: 100%; padding: 15px; background: #ff3b3b; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold;">🚪 سسٹم سے باہر نکلیں</button>
+    <div id="gateway">
+        <div class="gate-card" onclick="openPortal('dealer')">
+            <h1 style="color: var(--neon);">🏢 ڈیلر پورٹل</h1>
+            <p style="color: #888;">آرڈرز دیں اور بزنس سنبھالیں</p>
+            <button class="btn" style="background: var(--neon); width: 100%;">دکان میں داخل ہوں</button>
+        </div>
+        <div class="gate-card" onclick="openPortal('worker')">
+            <h1 style="color: var(--gold);">🛠️ ورکر پورٹل</h1>
+            <p style="color: #888;">اپنی مہارت بیچیں اور کمائیں</p>
+            <button class="btn" style="background: var(--gold); width: 100%;">کام شروع کریں</button>
         </div>
     </div>
 
-    <div class="main">
-        <div class="header">
-            <span style="color: var(--neon);">🛡️ کمانڈو پروٹیکشن آن</span>
-            <span id="user-info">ورکر آئی ڈی: SEC-9901</span>
+    <div id="app-shell">
+        <div class="sidebar">
+            <div style="font-size: 24px; font-weight: bold; color: var(--neon); margin-bottom: 40px; text-align: center;">🦅 البرکات</div>
+            <div class="nav-item active">📊 مین ڈیش بورڈ</div>
+            <div class="nav-item">📦 میرے آرڈرز</div>
+            <div class="nav-item">💬 وی آئی پی کمیونیکیشن</div>
+            <div class="nav-item">💰 والٹ (Earning)</div>
+            <div class="nav-item">📂 پورٹ فولیو لنکس</div>
+            <button class="btn btn-back" onclick="exitPortal()">🚪 مینو پر واپس جائیں</button>
         </div>
 
-        <div class="workspace">
-            <h2 style="font-weight: 300;">خوش آمدید، <span style="color: var(--neon);">آپ کا سمارٹ اسسٹنٹ</span> تیار ہے۔</h2>
-            
-            <div class="ai-container">
-                <textarea id="output" class="display-area" placeholder="اپنا حکم بولیں یا یہاں لکھیں۔۔۔"></textarea>
-                
-                <div class="controls">
-                    <button class="btn btn-mic" onclick="listenToBoss()">🎙️ حکم دیں (آواز)</button>
-                    <button class="btn btn-magic" onclick="transformContent()">✨ پروفیشنل ڈرافٹ بنائیں</button>
-                </div>
-                <div id="status-msg">AI سسٹم: آپ کے حکم کا منتظر ہے...</div>
+        <div class="main-view">
+            <div class="header">
+                <span id="portal-title" style="color: var(--gold); font-weight: bold;"></span>
+                <span style="color: #555;">🛡️ پرائیویسی گارڈ ایکٹیو</span>
             </div>
 
-            <div class="link-vault">
-                <h3>🔗 کام کے لنکس (محفوظ)</h3>
-                <input type="text" class="link-input" placeholder="صرف پروجیکٹ لنک یہاں ڈالیں...">
-                <p style="font-size: 12px; color: #666; margin-top: 5px;">*سیکیورٹی الرٹ: ذاتی ویب سائٹ یا سوشل میڈیا لنکس بلاک کر دیے جائیں گے۔</p>
-            </div>
-        </div>
-    </div>
-
-<script>
-    const output = document.getElementById('output');
-    const status = document.getElementById('status-msg');
-
-    // آواز کا جدید نظام
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ur-PK';
-
-        function listenToBoss() {
-            recognition.start();
-            status.innerText = "میں سن رہا ہوں، اپنا آئیڈیا بتائیں...";
-            speak("جی مالک، میں سن رہا ہوں");
-        }
-
-        recognition.onresult = (event) => {
-            const result = event.results[0][0].transcript;
-            output.value = result; // فی الحال یہاں الفاظ لکھتا ہے
-            status.innerText = "AI نے آپ کا پیغام وصول کر لیا۔ اب 'پروفیشنل بنائیں' پر کلک کریں۔";
-        };
-    }
-
-    // اصلی AI برین فنکشن
-    function transformContent() {
-        let rawText = output.value;
-        if (!rawText) return;
-
-        status.innerText = "AI دماغ کام کر رہا ہے...";
-        
-        // یہاں ہم فرضی AI پروسیسنگ کر رہے ہیں جو الفاظ کو سمجھ کر بدلتی ہے
-        setTimeout(() => {
-            let professionalDraft = "محترم کلائنٹ،\n\nامید ہے آپ خیریت سے ہوں گے۔ آپ کے پروجیکٹ کے حوالے سے میں نے کچھ اہم نکات تیار کیے ہیں: \n\n" + 
-                                    rawText + 
-                                    "\n\nبراہ کرم اس کا جائزہ لیں تاکہ ہم کام شروع کر سکیں۔\n\nنیک تمنائیں،\nالبرکات کمانڈو ٹیم";
-            output.value = professionalDraft;
-            status.innerText = "AI نے آپ کی بات کو پروفیشنل خط میں بدل دیا ہے!";
-            speak("آپ کا پروفیشنل ڈرافٹ تیار ہے");
-        }, 1000);
-    }
-
-    function logout() {
-        // یہ بٹن اب آپ کو صحیح طریقے سے ریفرش کر کے ہوم پر لے جائے گا
-        window.location.href = window.location.pathname; 
-    }
-
-    function speak(t) {
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'ur-PK';
-        window.speechSynthesis.speak(u);
-    }
-</script>
-</body>
-</html>
+            <div class="workspace">
+                <div class="store-grid">
+                    <div class="store
