@@ -2,141 +2,131 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - الٹرا ہب</title>
+    <title>البرکات کمانڈو - ماسٹر کنٹرول</title>
     <style>
         :root { 
-            --dealer-bg: linear-gradient(135deg, #4b1212, #1a0505); 
-            --worker-bg: linear-gradient(135deg, #0f2027, #2c5364);
-            --gold: #ffd700; --cyan: #00f2fe;
+            --admin-gold: #ffd700; --dealer-red: #ff4d4d; 
+            --worker-cyan: #00f2fe; --bg: #0a0a0a;
         }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden; transition: 0.5s; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
         
-        /* گیٹ وے */
-        #gateway { display: flex; height: 100vh; justify-content: center; align-items: center; gap: 30px; background: #000; }
-        .gate-box { padding: 50px; border-radius: 30px; border: 2px solid #333; cursor: pointer; text-align: center; width: 300px; transition: 0.3s; }
-        .gate-box:hover { transform: scale(1.05); border-color: var(--cyan); }
+        /* 1. خوبصورت لاگ ان اور سائن اپ فارم */
+        #auth-page { display: flex; height: 100vh; justify-content: center; align-items: center; background: radial-gradient(circle, #1a1a1a, #000); }
+        .auth-container { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 30px; border: 1px solid #333; width: 400px; text-align: center; backdrop-filter: blur(10px); }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #111; color: white; }
+        .btn { padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; margin: 10px; width: 120px; transition: 0.3s; }
+        .btn-login { background: var(--worker-cyan); color: #000; }
+        .btn-signup { background: transparent; border: 1px solid var(--worker-cyan); color: white; }
 
-        /* مین ایپ اسٹرکچر */
-        #main-app { display: none; height: 100vh; flex-direction: row; }
-        .sidebar { width: 280px; background: rgba(0,0,0,0.5); backdrop-filter: blur(20px); padding: 30px; border-left: 1px solid rgba(255,255,255,0.1); }
-        .content { flex: 1; padding: 40px; overflow-y: auto; }
-
-        /* ویڈیو کال اور وائس ڈیسک */
-        .comm-center { background: rgba(0,0,0,0.3); border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); margin-top: 20px; }
-        .video-placeholder { width: 100%; height: 250px; background: #111; border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px dashed #444; margin-bottom: 20px; }
+        /* 2. ایڈمن (مالک) کا خاص ڈیش بورڈ */
+        #admin-dashboard { display: none; height: 100vh; flex-direction: row; background: #050505; }
+        .sidebar { width: 280px; background: #111; padding: 30px; border-left: 1px solid #222; }
+        .main-stage { flex: 1; padding: 40px; overflow-y: auto; }
         
-        /* بٹنز */
-        .action-btn { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
-        .btn-video { background: #ff4757; color: white; }
-        .btn-voice { background: var(--cyan); color: black; }
-        .btn-exit { background: #333; color: white; margin-top: auto; }
+        /* ڈیٹا ٹیبل */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #161616; border-radius: 15px; overflow: hidden; }
+        .data-table th, .data-table td { padding: 15px; text-align: right; border-bottom: 1px solid #222; }
+        .data-table th { background: var(--admin-gold); color: black; }
 
-        .active-tab { background: rgba(255,255,255,0.1); border-right: 4px solid var(--cyan); }
+        /* سروس کارڈز (14 سروسز) */
+        .service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        .service-card { background: #1a1a1a; padding: 15px; border-radius: 15px; border: 1px solid #333; cursor: pointer; text-align: center; transition: 0.3s; }
+        .service-card:hover { border-color: var(--admin-gold); transform: scale(1.05); }
+
+        .hidden { display: none !important; }
     </style>
 </head>
-<body id="main-body">
+<body>
 
-    <div id="gateway">
-        <div class="gate-box" onclick="initApp('dealer')">
-            <h1 style="color: var(--gold);">🏢 ڈیلر پورٹل</h1>
-            <p>آرڈرز دیں اور کام کروائیں</p>
-        </div>
-        <div class="gate-box" onclick="initApp('worker')">
-            <h1 style="color: var(--cyan);">🛠️ ورکر پورٹل</h1>
-            <p>اپنی مہارت دکھائیں اور کمائیں</p>
+    <div id="auth-page">
+        <div class="auth-container">
+            <h1 style="color: var(--worker-cyan);">🦅 البرکات کمانڈو</h1>
+            <div id="form-content">
+                <input type="text" id="reg-name" placeholder="آپ کا پورا نام">
+                <input type="email" id="reg-email" placeholder="ای میل ایڈریس">
+                <input type="password" id="reg-pass" placeholder="پاس ورڈ">
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-login" onclick="login()">لاگ ان</button>
+                    <button class="btn btn-signup" onclick="toggleForm()">سائن اپ</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="main-app">
+    <div id="admin-dashboard">
         <div class="sidebar">
-            <h2 id="role-title" style="text-align: center; margin-bottom: 40px;">🦅 البرکات</h2>
-            <div id="menu-items">
-                </div>
-            <button class="action-btn btn-exit" onclick="location.reload()">🚪 سسٹم سے باہر نکلیں</button>
+            <h2 style="color: var(--admin-gold);">👑 ایڈمن کنٹرول</h2>
+            <hr border="0.1">
+            <p onclick="showAdminSection('users')" style="cursor:pointer;">👥 تمام یوزرز کا ڈیٹا</p>
+            <p onclick="showAdminSection('complaints')" style="cursor:pointer;">📩 شکایات و پیغامات</p>
+            <p onclick="showAdminSection('services')" style="cursor:pointer;">🛠️ 14 سروسز مینجمنٹ</p>
+            <button class="btn" style="background:red; color:white; width:100%; margin-top:100px;" onclick="location.reload()">لاگ آؤٹ</button>
         </div>
 
-        <div class="content">
-            <h1 id="welcome-msg">خوش آمدید</h1>
-            
-            <div class="comm-center">
-                <h3>📹 براہِ راست ویڈیو کال و سکرین شیئر (انکرپٹڈ)</h3>
-                <div class="video-placeholder" id="video-box">
-                    <span id="cam-status">کیمرہ آف ہے</span>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="action-btn btn-video" onclick="toggleCam()">📹 ویڈیو کال شروع کریں</button>
-                    <button class="action-btn btn-voice" onclick="startVoice()">🎙️ وائس کمانڈ (سنیں)</button>
+        <div class="main-stage">
+            <div id="admin-users" class="admin-sec">
+                <h1>📊 ڈیلر اور ورکر ڈیٹا (صرف آپ کے لیے)</h1>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>نام</th> <th>ای میل</th> <th>فون نمبر</th> <th>رول (Role)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-list">
+                        <tr><td>احمد خان</td> <td>ahmed@mail.com</td> <td>0300-1234567</td> <td>ڈیلر</td></tr>
+                        <tr><td>سارہ علی</td> <td>sara@mail.com</td> <td>0321-7654321</td> <td>ورکر</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="admin-services" class="admin-sec hidden">
+                <h1>🛠️ آپ کی 14 سروسز</h1>
+                <div class="service-grid">
+                    <div class="service-card">گیسٹ پوسٹنگ</div>
+                    <div class="service-card">سوشل مارکیٹنگ</div>
+                    <div class="service-card">ڈیجیٹل مارکیٹنگ</div>
+                    <div class="service-card">کریٹو ڈیزائن</div>
+                    <div class="service-card">ڈیٹا اینٹری</div>
+                    <div class="service-card">کنٹینٹ رائٹنگ</div>
+                    <div class="service-card">ٹیک ڈویلپمنٹ</div>
+                    <div class="service-card">یوٹیوب سروسز</div>
+                    <div class="service-card">ای کامرس سپورٹ</div>
+                    <div class="service-card">ورچوئل اسسٹنٹ</div>
+                    <div class="service-card">لوگو ڈیزائننگ</div>
+                    <div class="service-card">UI/UX ڈیزائن</div>
+                    <div class="service-card">بروشر ڈیزائن</div>
+                    <div class="service-card">تھمب نیل ڈیزائن</div>
                 </div>
             </div>
 
-            <div class="comm-center" style="margin-top: 30px;">
-                <h3>💬 اسمارٹ چیٹ باکس</h3>
-                <textarea id="chat-input" style="width: 100%; height: 100px; background: rgba(0,0,0,0.5); border: 1px solid #444; border-radius: 15px; color: white; padding: 15px; resize: none;" placeholder="اپنا پیغام یہاں لکھیں یا بولیں..."></textarea>
-                <button class="action-btn" style="background: var(--gold); color: black; margin-top: 10px;">✨ پروفیشنل بنائیں اور بھیجیں</button>
+            <div id="admin-complaints" class="admin-sec hidden">
+                <h1>📩 ڈیلرز کے خفیہ پیغامات</h1>
+                <div style="background:#222; padding:20px; border-radius:15px; border-right:5px solid red;">
+                    <strong>ڈیلر:</strong> "سر، ورکر نے کام وقت پر نہیں دیا۔ براہ کرم چیک کریں!"
+                </div>
             </div>
         </div>
     </div>
 
 <script>
-    function initApp(role) {
-        document.getElementById('gateway').style.display = 'none';
-        document.getElementById('main-app').style.display = 'flex';
-        
-        const body = document.getElementById('main-body');
-        const menu = document.getElementById('menu-items');
-        const roleTitle = document.getElementById('role-title');
+    function toggleForm() {
+        alert("سائن اپ فارم ایکٹیو ہو گیا۔ اب نیا یوزر رجسٹر ہو سکتا ہے۔");
+    }
 
-        if(role === 'dealer') {
-            body.style.background = "linear-gradient(135deg, #4b1212, #1a0505)";
-            roleTitle.innerText = "🏢 ڈیلر ڈیش بورڈ";
-            roleTitle.style.color = "var(--gold)";
-            menu.innerHTML = `
-                <button class="action-btn active-tab">📊 مارکیٹ اوور ویو</button>
-                <button class="action-btn">🛒 نئے آرڈرز دیں</button>
-                <button class="action-btn">🧾 ادائیگیوں کا ریکارڈ</button>
-            `;
-            speak("ڈیلر خوش آمدید، آپ کی لگژری دکان تیار ہے۔");
+    function login() {
+        const email = document.getElementById('reg-email').value;
+        if(email === "admin@albarakat.com") {
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('admin-dashboard').style.display = 'flex';
+            speak("خوش آمدید مالک، آپ کا خفیہ ڈیش بورڈ تیار ہے۔");
         } else {
-            body.style.background = "linear-gradient(135deg, #0f2027, #2c5364)";
-            roleTitle.innerText = "🛠️ ورکر ڈیش بورڈ";
-            roleTitle.style.color = "var(--cyan)";
-            menu.innerHTML = `
-                <button class="action-btn active-tab">📈 میری پروگریس</button>
-                <button class="action-btn">📦 فعال پروجیکٹس</button>
-                <button class="action-btn">💰 والٹ (کمائی)</button>
-                <button class="action-btn">📂 پورٹ فولیو اپ لوڈ</button>
-            `;
-            speak("ورکر خوش آمدید، آپ کا ورک سٹیشن آن لائن ہے۔");
+            alert("صرف ایڈمن (مالک) ہی اس ڈیش بورڈ کو کھول سکتا ہے!");
         }
     }
 
-    // ویڈیو کال فنکشن
-    async function toggleCam() {
-        const videoBox = document.getElementById('video-box');
-        const status = document.getElementById('cam-status');
-        
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            videoBox.innerHTML = `<video id="active-cam" autoplay playsinline style="width: 100%; height: 100%; border-radius: 20px; object-fit: cover;"></video>`;
-            document.getElementById('active-cam').srcObject = stream;
-            speak("ویڈیو کال سسٹم ایکٹیو ہو گیا ہے");
-        } catch (err) {
-            alert("کیمرہ استعمال کرنے کی اجازت نہیں ملی۔ براہ کرم براؤزر سیٹنگ چیک کریں۔");
-            speak("کیمرہ ایرر، اجازت درکار ہے");
-        }
-    }
-
-    // وائس کمانڈ فنکشن
-    function startVoice() {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'ur-PK';
-        recognition.start();
-
-        recognition.onresult = (event) => {
-            const text = event.results[0][0].transcript;
-            document.getElementById('chat-input').value = text;
-            speak("میں نے سن لیا، آپ نے کہا: " + text);
-        };
+    function showAdminSection(id) {
+        document.querySelectorAll('.admin-sec').forEach(s => s.classList.add('hidden'));
+        document.getElementById('admin-' + id).classList.remove('hidden');
     }
 
     function speak(m) {
