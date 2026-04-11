@@ -2,88 +2,85 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - سمارٹ گیٹ وے</title>
+    <title>البرکات کمانڈو - سپر پلیٹ فارم</title>
     <style>
         body { background: #000; color: #00ffcc; font-family: 'Segoe UI', Tahoma; margin: 0; padding: 20px; }
-        .master-frame { border: 4px solid #00ffcc; border-radius: 25px; padding: 25px; max-width: 1200px; margin: auto; box-shadow: 0 0 50px #00ffcc; background: #050505; }
-        .user-selector { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .type-btn { padding: 20px 40px; font-size: 20px; font-weight: bold; border-radius: 50px; cursor: pointer; border: 2px solid #00ffcc; background: transparent; color: #00ffcc; }
-        .type-btn.active { background: #00ffcc; color: #000; }
+        .master-frame { border: 4px solid #00ffcc; border-radius: 25px; padding: 25px; max-width: 1100px; margin: auto; box-shadow: 0 0 50px #00ffcc; background: #050505; }
+        .selector-box { display: flex; justify-content: center; gap: 20px; margin: 40px 0; }
+        .role-btn { padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 15px; cursor: pointer; border: 2px solid #00ffcc; background: transparent; color: #00ffcc; }
         
-        /* چیٹ اور کال سسٹم */
-        .comm-box { display: none; background: #111; border: 1px solid #333; border-radius: 20px; padding: 20px; margin-top: 20px; }
-        .video-screen { width: 100%; height: 200px; background: #222; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; }
-        .chat-input { width: 80%; padding: 15px; border-radius: 10px; border: none; background: #222; color: #fff; }
+        .interface { display: none; background: #111; border-radius: 20px; padding: 20px; border: 1px solid #333; }
+        .video-box { width: 100%; height: 200px; background: #222; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: gold; border: 2px dashed #444; }
         
-        .privacy-alert { color: #ff3333; font-size: 12px; margin-top: 5px; display: none; }
-        .ai-help { background: gold; color: #000; padding: 10px; border-radius: 10px; margin-top: 10px; font-weight: bold; display: none; }
+        .chat-area { height: 150px; overflow-y: auto; background: #000; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #00ffcc; }
+        .controls { display: flex; gap: 10px; }
+        input { flex: 1; padding: 15px; border-radius: 10px; border: none; background: #222; color: #fff; }
+        
+        .back-btn { background: #ff3333; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; border: none; margin-bottom: 20px; font-weight: bold; }
+        .voice-btn { background: gold; color: black; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; border: none; }
     </style>
 </head>
 <body>
 
 <div class="master-frame">
-    <h1 style="text-align: center;">🛡️ البرکات کمانڈو: سمارٹ گیٹ وے</h1>
-    
-    <div class="user-selector" id="roleSelector">
-        <button class="type-btn" onclick="setRole('client')">👤 میں کلائنٹ ہوں</button>
-        <button class="type-btn" onclick="setRole('worker')">🛠️ میں ورکر ہوں</button>
+    <h1 style="text-align: center;">🛡️ البرکات کمانڈو: آل ان ون پلیٹ فارم</h1>
+
+    <div class="selector-box" id="mainMenu">
+        <button class="role-btn" onclick="openInterface('client')">👤 کلائنٹ پورٹل</button>
+        <button class="role-btn" onclick="openInterface('worker')">🛠️ ورکر ڈیش بورڈ</button>
     </div>
 
-    <div id="clientView" style="display:none;">
-        <h2 style="color: gold;">خوش آمدید کلائنٹ! آپ کیا سروس خریدنا چاہتے ہیں؟</h2>
-        <div class="services-list" id="services">گیسٹ پوسٹنگ، ایس ای او، گرافک ڈیزائن...</div>
-    </div>
-
-    <div id="workerView" style="display:none;">
-        <h2 style="color: #00ffcc;">خوش آمدید ورکر! آپ کے لیے نئے آرڈرز تیار ہیں۔</h2>
-        <div id="aiHelpBox" class="ai-help">💡 کمانڈو مشورہ: اس کام کو مکمل کرنے کے لیے آپ کو Web Scraping استعمال کرنی چاہیے۔</div>
-    </div>
-
-    <div class="comm-box" id="commBox">
-        <div class="video-screen">📹 ویڈیو کال سسٹم (انکرپٹڈ)</div>
-        <div id="chatDisplay" style="height: 100px; overflow-y: auto; border: 1px solid #333; margin-bottom: 10px; padding: 5px;"></div>
-        <input type="text" id="msgInput" class="chat-input" placeholder="پیغام لکھیں (فون نمبر بلاک ہیں)...">
-        <button onclick="sendMessage()" class="type-btn" style="padding: 10px 20px;">بھیجیں</button>
-        <p id="privacyWarning" class="privacy-alert">⚠️ خبردار! ذاتی رابطہ نمبر شیئر کرنا منع ہے اور یہ بلاک کر دیا گیا ہے۔</p>
+    <div id="displayArea" class="interface">
+        <button class="back-btn" onclick="goBack()">⬅️ واپس مین مینو پر جائیں</button>
+        <h2 id="roleTitle" style="color: gold; text-align: center;"></h2>
+        
+        <div class="video-box">📹 انکرپٹڈ ویڈیو کال سسٹم ایکٹیو</div>
+        
+        <div class="chat-area" id="chatLogs">چیٹ شروع کریں...</div>
+        
+        <div class="controls">
+            <input type="text" id="msgInput" placeholder="اپنا پیغام ٹائپ کریں...">
+            <button class="voice-btn" onclick="startVoice()">🎙️ بولیں</button>
+            <button class="role-btn" style="padding: 10px;" onclick="sendMessage()">بھیجیں</button>
+        </div>
     </div>
 </div>
 
 <script>
     let currentRole = "";
 
-    function setRole(role) {
+    function openInterface(role) {
         currentRole = role;
-        document.getElementById('roleSelector').style.display = 'none';
-        document.getElementById('commBox').style.display = 'block';
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('displayArea').style.display = 'block';
+        document.getElementById('roleTitle').innerText = (role === 'client') ? "خوش آمدید کلائنٹ! آپ کیا سروس خریدنا چاہتے ہیں؟" : "خوش آمدید ورکر! نئے آرڈرز کی تلاش کریں";
         
-        if(role === 'client') {
-            document.getElementById('clientView').style.display = 'block';
-            speak("خوش آمدید کلائنٹ۔ البرکات سسٹم آپ کی سروس کے لیے تیار ہے۔");
-        } else {
-            document.getElementById('workerView').style.display = 'block';
-            document.getElementById('aiHelpBox').style.display = 'block';
-            speak("خوش آمدید ورکر۔ اپنا کام شروع کریں، میں آپ کی مدد کے لیے حاضر ہوں۔");
-        }
+        speak(role === 'client' ? "کلائنٹ پورٹل میں خوش آمدید" : "ورکر ڈیش بورڈ میں خوش آمدید");
+    }
+
+    function goBack() {
+        document.getElementById('displayArea').style.display = 'none';
+        document.getElementById('mainMenu').style.display = 'flex';
     }
 
     function sendMessage() {
         let input = document.getElementById('msgInput').value;
-        let chat = document.getElementById('chatDisplay');
-        let warning = document.getElementById('privacyWarning');
+        if(input.trim() === "") return;
 
-        // ای میل اور فون نمبر چیک کرنے والا سیکیورٹی گارڈ (Regex)
+        // پرائیویسی گارڈ: ای میل اور نمبر بلاک
         const privacyPattern = /[0-9]{10,13}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-
         if (privacyPattern.test(input)) {
-            warning.style.display = 'block';
-            input = " [ڈیٹا بلاک کر دیا گیا] ";
-            speak("ذاتی معلومات شیئر کرنا منع ہے۔");
-        } else {
-            warning.style.display = 'none';
+            alert("سیکیورٹی وارننگ: ذاتی معلومات شیئر کرنا منع ہے!");
+            input = "[محفوظ ڈیٹا]";
         }
 
-        chat.innerHTML += `<div><b>${currentRole}:</b> ${input}</div>`;
+        document.getElementById('chatLogs').innerHTML += `<div><strong>${currentRole}:</strong> ${input}</div>`;
         document.getElementById('msgInput').value = "";
+    }
+
+    function startVoice() {
+        speak("میں سن رہا ہوں، مالک۔ اپنا پیغام بولیں۔");
+        // یہاں ہم آواز کو ٹیکسٹ میں بدلنے کا فنکشن (Speech-to-Text) مستقبل میں جوڑیں گے
     }
 
     function speak(text) {
