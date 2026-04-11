@@ -2,91 +2,111 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - سپر پلیٹ فارم</title>
+    <title>البرکات کمانڈو - ماسٹر پلیٹ فارم</title>
     <style>
-        body { background: #000; color: #00ffcc; font-family: 'Segoe UI', Tahoma; margin: 0; padding: 20px; }
+        body { background: #000; color: #00ffcc; font-family: 'Segoe UI', Tahoma; margin: 0; padding: 20px; overflow-x: hidden; }
         .master-frame { border: 4px solid #00ffcc; border-radius: 25px; padding: 25px; max-width: 1100px; margin: auto; box-shadow: 0 0 50px #00ffcc; background: #050505; }
-        .selector-box { display: flex; justify-content: center; gap: 20px; margin: 40px 0; }
-        .role-btn { padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 15px; cursor: pointer; border: 2px solid #00ffcc; background: transparent; color: #00ffcc; }
+        .header-title { text-align: center; color: #00ffcc; text-shadow: 0 0 10px #00ffcc; margin-bottom: 30px; }
         
-        .interface { display: none; background: #111; border-radius: 20px; padding: 20px; border: 1px solid #333; }
-        .video-box { width: 100%; height: 200px; background: #222; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: gold; border: 2px dashed #444; }
+        /* مین سلیکٹر بٹن */
+        .selector-box { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 50px 0; }
+        .role-btn { padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 15px; cursor: pointer; border: 2px solid #00ffcc; background: transparent; color: #00ffcc; transition: 0.4s; min-width: 250px; }
+        .role-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px #00ffcc; }
         
-        .chat-area { height: 150px; overflow-y: auto; background: #000; padding: 10px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #00ffcc; }
+        /* انٹرفیس ڈیزائن */
+        .portal { display: none; background: #111; border-radius: 20px; padding: 25px; border: 1px solid #333; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .video-box { width: 100%; height: 250px; background: #222; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: gold; border: 2px dashed #444; font-size: 20px; }
+        .chat-display { height: 200px; overflow-y: auto; background: #000; border: 1px solid #00ffcc; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-family: monospace; }
+        
         .controls { display: flex; gap: 10px; }
-        input { flex: 1; padding: 15px; border-radius: 10px; border: none; background: #222; color: #fff; }
-        
-        .back-btn { background: #ff3333; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; border: none; margin-bottom: 20px; font-weight: bold; }
-        .voice-btn { background: gold; color: black; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; border: none; }
+        input { flex: 1; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; outline: none; }
+        .action-btn { background: #00ffcc; color: #000; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .back-btn { background: #ff4444; color: #fff; padding: 10px 25px; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+        .voice-btn { background: gold; color: #000; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="master-frame">
-    <h1 style="text-align: center;">🛡️ البرکات کمانڈو: آل ان ون پلیٹ فارم</h1>
-
-    <div class="selector-box" id="mainMenu">
-        <button class="role-btn" onclick="openInterface('client')">👤 کلائنٹ پورٹل</button>
-        <button class="role-btn" onclick="openInterface('worker')">🛠️ ورکر ڈیش بورڈ</button>
+    <div class="header-title">
+        <h1>🛡️ البرکات کمانڈو: ماسٹر پورٹل</h1>
+        <p id="system-status">سسٹم آن لائن ہے | پرائیویسی گارڈ ایکٹیو</p>
     </div>
 
-    <div id="displayArea" class="interface">
-        <button class="back-btn" onclick="goBack()">⬅️ واپس مین مینو پر جائیں</button>
-        <h2 id="roleTitle" style="color: gold; text-align: center;"></h2>
+    <div id="mainMenu" class="selector-box">
+        <button class="role-btn" onclick="showPortal('client')">👤 کلائنٹ پورٹل (آرڈر کریں)</button>
+        <button class="role-btn" onclick="showPortal('worker')">🛠️ ورکر پورٹل (کام کریں)</button>
+    </div>
+
+    <div id="portalArea" class="portal">
+        <button class="back-btn" onclick="goHome()">⬅️ مین مینو پر واپس جائیں</button>
+        <h2 id="portalTitle" style="color: gold; margin-bottom: 20px;"></h2>
         
-        <div class="video-box">📹 انکرپٹڈ ویڈیو کال سسٹم ایکٹیو</div>
+        <div class="video-box">📹 محفوظ ویڈیو کال سسٹم (انکرپٹڈ)</div>
         
-        <div class="chat-area" id="chatLogs">چیٹ شروع کریں...</div>
+        <div id="chatArea" class="chat-display">سسٹم میسج: محفوظ چیٹ شروع ہو چکی ہے...</div>
         
         <div class="controls">
-            <input type="text" id="msgInput" placeholder="اپنا پیغام ٹائپ کریں...">
+            <input type="text" id="userInput" placeholder="اپنا میسج یہاں لکھیں...">
             <button class="voice-btn" onclick="startVoice()">🎙️ بولیں</button>
-            <button class="role-btn" style="padding: 10px;" onclick="sendMessage()">بھیجیں</button>
+            <button class="action-btn" onclick="sendMsg()">بھیجیں</button>
         </div>
     </div>
 </div>
 
 <script>
-    let currentRole = "";
-
-    function openInterface(role) {
-        currentRole = role;
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('displayArea').style.display = 'block';
-        document.getElementById('roleTitle').innerText = (role === 'client') ? "خوش آمدید کلائنٹ! آپ کیا سروس خریدنا چاہتے ہیں؟" : "خوش آمدید ورکر! نئے آرڈرز کی تلاش کریں";
-        
-        speak(role === 'client' ? "کلائنٹ پورٹل میں خوش آمدید" : "ورکر ڈیش بورڈ میں خوش آمدید");
-    }
-
-    function goBack() {
-        document.getElementById('displayArea').style.display = 'none';
-        document.getElementById('mainMenu').style.display = 'flex';
-    }
-
-    function sendMessage() {
-        let input = document.getElementById('msgInput').value;
-        if(input.trim() === "") return;
-
-        // پرائیویسی گارڈ: ای میل اور نمبر بلاک
-        const privacyPattern = /[0-9]{10,13}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-        if (privacyPattern.test(input)) {
-            alert("سیکیورٹی وارننگ: ذاتی معلومات شیئر کرنا منع ہے!");
-            input = "[محفوظ ڈیٹا]";
-        }
-
-        document.getElementById('chatLogs').innerHTML += `<div><strong>${currentRole}:</strong> ${input}</div>`;
-        document.getElementById('msgInput').value = "";
-    }
-
-    function startVoice() {
-        speak("میں سن رہا ہوں، مالک۔ اپنا پیغام بولیں۔");
-        // یہاں ہم آواز کو ٹیکسٹ میں بدلنے کا فنکشن (Speech-to-Text) مستقبل میں جوڑیں گے
-    }
+    let role = "";
+    const chatArea = document.getElementById('chatArea');
 
     function speak(text) {
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'ur-PK';
         window.speechSynthesis.speak(msg);
+    }
+
+    function showPortal(type) {
+        role = type;
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('portalArea').style.display = 'block';
+        
+        if(type === 'client') {
+            document.getElementById('portalTitle').innerText = "خوش آمدید کلائنٹ! اپنی سروس کا انتخاب کریں۔";
+            speak("کلائنٹ پورٹل میں خوش آمدید۔ آپ کیا سروس خریدنا چاہتے ہیں؟");
+        } else {
+            document.getElementById('portalTitle').innerText = "خوش آمدید ورکر! نئے ٹاسک یہاں موجود ہیں۔";
+            speak("ورکر پورٹل میں خوش آمدید۔ اپنا کام شروع کریں۔");
+        }
+    }
+
+    function goHome() {
+        document.getElementById('portalArea').style.display = 'none';
+        document.getElementById('mainMenu').style.display = 'flex';
+        speak("مین مینو پر واپسی۔");
+    }
+
+    function sendMsg() {
+        const input = document.getElementById('userInput');
+        let text = input.value;
+        if(text.trim() === "") return;
+
+        // سیکیورٹی گارڈ: نمبر اور ای میل چیکر
+        const privacyCheck = /[0-9]{10,13}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+        if (privacyCheck.test(text)) {
+            alert("⚠️ سیکیورٹی الرٹ: ذاتی رابطہ شیئر کرنا منع ہے!");
+            text = " [ڈیٹا سیکیورٹی کی وجہ سے بلاک کر دیا گیا] ";
+            speak("ذاتی معلومات شیئر کرنا منع ہے۔");
+        }
+
+        chatArea.innerHTML += `<div><strong style="color:#00ffcc;">${role.toUpperCase()}:</strong> ${text}</div>`;
+        input.value = "";
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function startVoice() {
+        speak("میں آپ کی آواز سن رہا ہوں۔ اپنا حکم دیں۔");
+        // یہاں Speech to Text کا فیچر مستقبل میں مزید اپڈیٹ کیا جا سکتا ہے
     }
 </script>
 
