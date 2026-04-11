@@ -2,142 +2,144 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - لگژری ڈیش بورڈ</title>
+    <title>البرکات کمانڈو - لگژری بزنس ہب</title>
     <style>
         :root { 
-            --primary: #00f2fe; --secondary: #4facfe; 
-            --accent: #ffd700; --glass: rgba(255, 255, 255, 0.07);
-            --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
+            --gold: #d4af37; --royal-blue: #1a2a6c; 
+            --soft-white: #f4f7f6; --accent-cyan: #00e5ff;
         }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', Tahoma; margin: 0; min-height: 100vh; transition: 0.5s; }
-
-        /* لاگ ان اسکرین (پہلا تاثر) */
-        #main-gate { display: flex; height: 100vh; justify-content: center; align-items: center; gap: 40px; padding: 20px; }
-        .gate-box { 
-            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1);
-            padding: 60px 40px; border-radius: 40px; text-align: center; width: 320px; cursor: pointer; transition: 0.4s;
+        /* نفیس اور پیارا بیک گراؤنڈ */
+        body { 
+            background: linear-gradient(to right, #1a2a6c, #b21f1f, #fdbb2d); 
+            font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; color: white; height: 100vh; overflow: hidden;
         }
-        .gate-box:hover { transform: translateY(-15px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
 
-        /* مین ڈیش بورڈ ڈیزائن */
-        #dashboard { display: none; height: 100vh; flex-direction: row; }
-        .sidebar { width: 300px; background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); padding: 30px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1); }
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-
-        /* سمارٹ بٹنز */
-        .menu-btn { 
-            padding: 18px; margin: 10px 0; border-radius: 15px; cursor: pointer; border: none;
-            background: transparent; color: #ccc; text-align: right; font-size: 16px; transition: 0.3s;
+        /* مین گیٹ وے */
+        #main-gate { display: flex; height: 100vh; justify-content: center; align-items: center; gap: 50px; transition: 0.5s; }
+        .business-card { 
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border-radius: 40px; 
+            padding: 60px; width: 350px; text-align: center; border: 2px solid rgba(255,255,255,0.2);
+            cursor: pointer; transition: 0.4s;
         }
-        .menu-btn:hover, .menu-btn.active { background: var(--glass); color: var(--primary); font-weight: bold; }
-        .logout { background: #ff4757 !important; color: white !important; margin-top: auto; }
+        .business-card:hover { transform: translateY(-20px); border-color: var(--gold); box-shadow: 0 25px 50px rgba(0,0,0,0.4); }
 
-        /* کارڈز اور ڈیٹا */
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--glass); padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        /* اصلی پلیٹ فارم اسٹرکچر */
+        #platform { display: none; height: 100vh; flex-direction: row; background: rgba(0,0,0,0.1); }
+        .sidebar { width: 320px; background: rgba(0,0,0,0.6); backdrop-filter: blur(30px); padding: 40px 20px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1); }
+        .main-stage { flex: 1; padding: 50px; overflow-y: auto; background: rgba(255,255,255,0.05); }
+
+        /* بٹنز جو اب کام کریں گے */
+        .nav-btn { 
+            padding: 20px; margin: 12px 0; border-radius: 20px; border: none; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: #fff; font-size: 17px; text-align: right; transition: 0.3s;
+        }
+        .nav-btn:hover, .nav-btn.active { background: var(--gold); color: #000; font-weight: bold; transform: translateX(-10px); }
+        .exit-btn { background: #ff4757 !important; color: white !important; margin-top: auto; font-weight: bold; }
+
+        /* دکان کے سیکشنز */
+        .store-section { display: none; animation: slideIn 0.5s ease; }
+        .store-section.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* ڈیٹا ڈسپلے */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
+        .stat-box { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         
-        /* AI رائٹر */
-        .ai-writing-zone { background: rgba(0,0,0,0.2); border-radius: 30px; padding: 35px; border: 1px solid rgba(255,255,255,0.1); }
-        .ai-textarea { 
-            width: 100%; height: 200px; background: rgba(0,0,0,0.3); border: 1px solid #444; 
-            border-radius: 20px; padding: 20px; color: #fff; font-size: 18px; resize: none; outline: none;
-        }
-        .pro-btn { background: linear-gradient(to right, var(--primary), var(--secondary)); color: black; padding: 15px 40px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        
-        /* سیکشنز کو چھپانا */
-        .content-section { display: none; animation: fadeIn 0.5s; }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .ai-box { background: rgba(0,0,0,0.3); border-radius: 30px; padding: 40px; border: 1px solid var(--gold); }
+        textarea { width: 100%; height: 200px; background: transparent; border: none; color: white; font-size: 19px; outline: none; resize: none; }
     </style>
 </head>
 <body>
 
     <div id="main-gate">
-        <div class="gate-box" onclick="startApp('ڈیلر')">
-            <h2 style="color: var(--primary);">🏢 ڈیلر پورٹل</h2>
-            <p>آرڈر دیں اور کام کروائیں</p>
+        <div class="business-card" onclick="entry('ڈیلر')">
+            <h1 style="color: var(--gold); font-size: 40px;">🏢 ڈیلر پورٹل</h1>
+            <p>اپنی دکان سنبھالیں اور آرڈرز دیں</p>
         </div>
-        <div class="gate-box" onclick="startApp('ورکر')">
-            <h2 style="color: var(--accent);">🛠️ ورکر پورٹل</h2>
-            <p>اپنی سروسز بیچیں اور کمائیں</p>
+        <div class="business-card" onclick="entry('ورکر')">
+            <h1 style="color: var(--accent-cyan); font-size: 40px;">🛠️ ورکر پورٹل</h1>
+            <p>اپنی مہارت دکھائیں اور رقم کمائیں</p>
         </div>
     </div>
 
-    <div id="dashboard">
+    <div id="platform">
         <div class="sidebar">
-            <h2 style="color: var(--primary); text-align: center;">🦅 البرکات کمانڈو</h2>
-            <button class="menu-btn active" onclick="showSection('home')">🏠 ہوم ڈیش بورڈ</button>
-            <button class="menu-btn" onclick="showSection('orders')">📦 آرڈرز کی دکان</button>
-            <button class="menu-btn" onclick="showSection('wallet')">💰 والٹ (کمائی)</button>
-            <button class="menu-btn" onclick="showSection('portfolio')">📂 پورٹ فولیو لنکس</button>
-            <button class="menu-btn logout" onclick="backToGate()">🚪 مینو پر واپس جائیں</button>
+            <h2 id="user-tag" style="color: var(--gold); text-align: center; margin-bottom: 50px;">🦅 البرکات ماسٹر</h2>
+            <button class="nav-btn active" onclick="showTab('dashboard')">📊 مین ڈیش بورڈ</button>
+            <button class="nav-btn" onclick="showTab('orders')">📦 آرڈرز کی دکان</button>
+            <button class="nav-btn" onclick="showTab('wallet')">💰 والٹ (Earning)</button>
+            <button class="nav-btn" onclick="showTab('links')">📂 کام کے ثبوت (Portfolios)</button>
+            <button class="nav-btn exit-btn" onclick="exit()">🚪 سسٹم سے باہر نکلیں</button>
         </div>
 
-        <div class="main-content">
-            <div id="welcome-header">
-                <h1 id="user-heading">خوش آمدید</h1>
-                <hr style="border: 0.5px solid rgba(255,255,255,0.1);">
-            </div>
-
-            <div id="home" class="content-section active">
-                <div class="grid-stats">
-                    <div class="stat-card"><h4>کل بیلنس</h4><h2>$0.00</h2></div>
-                    <div class="stat-card"><h4>فعال پروجیکٹس</h4><h2>0</h2></div>
-                    <div class="stat-card"><h4>سیکیورٹی لیول</h4><h2 style="color: var(--primary);">High</h2></div>
+        <div class="main-content main-stage">
+            <div id="dashboard" class="store-section active">
+                <h1 style="font-size: 45px;">خوش آمدید، آپ کی دکان <span style="color: var(--gold);">آن لائن</span> ہے!</h1>
+                <div class="stat-grid">
+                    <div class="stat-box"><h3>کل رقم</h3><h2 style="color: var(--gold);">$0.00</h2></div>
+                    <div class="stat-box"><h3>مکمل آرڈرز</h3><h2>0</h2></div>
+                    <div class="stat-box"><h3>سیکیورٹی گارڈ</h3><h2 style="color: #2ecc71;">فعال</h2></div>
                 </div>
-
-                <div class="ai-writing-zone">
-                    <h3>🎙️ AI سمارٹ رائٹر (بولیں اور لکھوائیں)</h3>
-                    <textarea id="ai-input" class="ai-textarea" placeholder="جو آپ لکھوانا چاہتے ہیں وہ بولیں یا یہاں ٹائپ کریں..."></textarea>
-                    <button class="pro-btn" onclick="processAI()">✨ پروفیشنل ڈرافٹ بنائیں</button>
+                <div class="ai-box">
+                    <h3>🎙️ اسمارٹ AI رائٹر (بولیں یا لکھیں)</h3>
+                    <textarea id="ai-text" placeholder="یہاں اپنا حکم لکھیں یا بولیں، AI اسے پروفیشنل بنا دے گا..."></textarea>
+                    <button class="nav-btn" style="background: var(--gold); color: #000; width: 250px;" onclick="doMagic()">✨ پروفیشنل ڈرافٹ بنائیں</button>
                 </div>
             </div>
 
-            <div id="orders" class="content-section"><h2>📦 آپ کے حالیہ آرڈرز یہاں نظر آئیں گے۔</h2></div>
-            <div id="wallet" class="content-section"><h2>💰 آپ کی تمام کمائی کا ریکارڈ یہاں محفوظ ہے۔</h2></div>
-            <div id="portfolio" class="content-section">
-                <h2>📂 کام کے لنکس</h2>
-                <input type="text" placeholder="لنک یہاں ڈالیں..." style="width: 80%; padding: 15px; border-radius: 10px; background: #111; border: 1px solid #444; color: white;">
+            <div id="orders" class="store-section"><h1>📦 آرڈرز کی دکان فی الحال خالی ہے۔</h1></div>
+            <div id="wallet" class="store-section"><h1>💰 آپ کی کمائی یہاں محفوظ رہے گی۔</h1></div>
+            <div id="links" class="store-section">
+                <h1>📂 پورٹ فولیو لنکس ڈالیں</h1>
+                <input type="text" placeholder="پروفیشنل لنک یہاں کاپی کریں..." style="width: 100%; padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.1); border: 1px solid var(--gold); color: white;">
             </div>
         </div>
     </div>
 
 <script>
-    function startApp(role) {
+    // 1. لاگ ان اور داخلہ
+    function entry(role) {
         document.getElementById('main-gate').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'flex';
-        document.getElementById('user-heading').innerText = "خوش آمدید " + role + "!";
-        speak(role + " پورٹل میں خوش آمدید");
+        document.getElementById('platform').style.display = 'flex';
+        document.getElementById('user-tag').innerText = "🦅 البرکات " + role;
+        speak(role + " پورٹل میں خوش آمدید، آپ کا ڈیش بورڈ تیار ہے۔");
     }
 
-    function backToGate() {
-        document.getElementById('dashboard').style.display = 'none';
+    // 2. مینو بٹنز کا کام کرنا (اصلی حل)
+    function showTab(tabId) {
+        // تمام سیکشنز کو چھپائیں
+        const sections = document.getElementsByClassName('store-section');
+        for (let s of sections) { s.classList.remove('active'); }
+        
+        // منتخب سیکشن دکھائیں
+        document.getElementById(tabId).classList.add('active');
+
+        // بٹن کا رنگ تبدیل کریں
+        const btns = document.getElementsByClassName('nav-btn');
+        for (let b of btns) { b.classList.remove('active'); }
+        event.currentTarget.classList.add('active');
+    }
+
+    // 3. سسٹم سے باہر نکلنا
+    function exit() {
+        document.getElementById('platform').style.display = 'none';
         document.getElementById('main-gate').style.display = 'flex';
-        speak("آپ مرکزی مینو پر واپس آ گئے ہیں");
+        speak("سسٹم سے لاگ آؤٹ ہو گیا ہے۔");
     }
 
-    function showSection(id) {
-        // تمام سیکشنز چھپائیں
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        // متعلقہ سیکشن دکھائیں
-        document.getElementById(id).classList.add('active');
-        // بٹنز کا رنگ بدلیں
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+    // 4. AI جادو (رائٹر)
+    function doMagic() {
+        let txt = document.getElementById('ai-text').value;
+        if(!txt) return;
+        document.getElementById('ai-text').value = "پروفیشنل بزنس رپورٹ:\n\n" + txt + "\n\nتیار کردہ: البرکات اسمارٹ کمانڈو";
+        speak("آپ کی تحریر کو پروفیشنل بنا دیا گیا ہے۔");
     }
 
-    function processAI() {
-        let input = document.getElementById('ai-input').value;
-        if(!input) return;
-        document.getElementById('ai-input').value = "پروفیشنل تحریر:\n\n" + input + "\n\n(تیار کردہ بذریعہ البرکات سمارٹ اسسٹنٹ)";
-        speak("آپ کی تحریر تیار ہے");
-    }
-
-    function speak(t) {
-        const u = new SpeechSynthesisUtterance(t);
+    function speak(m) {
+        const u = new SpeechSynthesisUtterance(m);
         u.lang = 'ur-PK';
         window.speechSynthesis.speak(u);
     }
 </script>
 </body>
-</html
+</html>
