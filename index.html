@@ -2,80 +2,100 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - ماسٹر مارکیٹ</title>
+    <title>البرکات کمانڈو - سپر مارکیٹ</title>
     <style>
-        :root { --neon: #00ffcc; --gold: gold; --dark: #050505; }
-        body { background: #000; color: white; font-family: 'Segoe UI', Tahoma; margin: 0; }
-        .master-app { display: flex; flex-direction: column; height: 100vh; }
+        :root { --neon: #00ffcc; --gold: gold; --bg-dark: #050505; --panel: #111; }
+        body { background: #000; color: white; font-family: 'Segoe UI', Tahoma; margin: 0; overflow-x: hidden; }
+        .master-app { display: flex; height: 100vh; flex-direction: column; }
         
         /* ٹاپ نیویگیشن */
-        .top-nav { background: #111; padding: 15px 30px; border-bottom: 2px solid var(--neon); display: flex; justify-content: space-between; align-items: center; }
+        .top-nav { background: var(--panel); padding: 10px 30px; border-bottom: 2px solid var(--neon); display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 24px; font-weight: bold; color: var(--neon); text-shadow: 0 0 10px var(--neon); }
-        
-        /* مین باڈی */
-        .main-container { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 250px; background: #0a0a0a; border-left: 1px solid #222; padding: 20px; display: none; }
-        .content { flex: 1; padding: 30px; overflow-y: auto; background: linear-gradient(135deg, #050505 0%, #111 100%); }
+        .status { font-size: 12px; color: #888; }
 
-        /* کارڈ ڈیزائن */
+        /* مینو اسکرین */
         .gate-screen { display: flex; justify-content: center; align-items: center; height: 80vh; gap: 40px; }
-        .pro-card { width: 320px; padding: 40px; background: #111; border: 2px solid #222; border-radius: 30px; text-align: center; cursor: pointer; transition: 0.5s; }
+        .pro-card { width: 320px; padding: 40px; background: var(--panel); border: 2px solid #222; border-radius: 30px; text-align: center; cursor: pointer; transition: 0.5s; }
         .pro-card:hover { border-color: var(--neon); transform: scale(1.05); box-shadow: 0 0 40px rgba(0,255,204,0.2); }
+        .btn-action { background: var(--neon); color: black; padding: 12px 25px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
+
+        /* ڈیش بورڈ باڈی */
+        .dashboard-container { display: flex; flex: 1; overflow: hidden; display: none; }
+        .sidebar { width: 250px; background: #0a0a0a; border-left: 1px solid #222; padding: 20px; }
+        .content { flex: 1; padding: 30px; overflow-y: auto; background: linear-gradient(135deg, #050505 0%, #111 100%); }
+        .nav-item { padding: 15px; margin: 10px 0; border-radius: 10px; cursor: pointer; transition: 0.3s; border-bottom: 1px solid #222; }
+        .nav-item:hover { background: var(--neon); color: black; font-weight: bold; }
         
-        /* ڈیش بورڈ ایلیمنٹس */
+        /* ڈیش بورڈ کارڈز */
         .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-box { background: #1a1a1a; padding: 20px; border-radius: 15px; border-top: 4px solid var(--neon); }
-        .chat-section { background: #000; border: 1px solid #333; border-radius: 20px; height: 400px; display: flex; flex-direction: column; margin-top: 20px; }
-        
-        .btn-action { background: var(--neon); color: black; padding: 12px 25px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
-        .back-home { position: absolute; top: 80px; left: 30px; background: red; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; border: none; }
+        .stat-box { background: var(--panel); padding: 25px; border-radius: 20px; border: 1px solid #333; border-top: 5px solid var(--neon); }
+        .stat-box h3 { color: #888; margin-top: 0; }
+        .stat-box p { font-size: 30px; margin: 10px 0; font-weight: bold; color: white; }
+
+        /* کمیونیکیشن اور وائس چیٹ */
+        .chat-section { background: #000; border: 1px solid #333; border-radius: 20px; height: 350px; display: flex; flex-direction: column; margin-top: 20px; overflow: hidden; }
+        .chats { flex: 1; padding: 20px; overflow-y: auto; color: #eee; font-family: monospace; }
+        .input-bar { display: flex; gap: 10px; padding: 15px; background: #111; border-top: 1px solid #222; }
+        input { flex: 1; padding: 15px; border-radius: 10px; border: none; background: #1a1a1a; color: white; outline: none; }
+        .icon-btn { padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; font-size: 18px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="master-app">
     <div class="top-nav">
-        <div class="logo">🦅 البرکات کمانڈو مارکیٹ</div>
-        <div id="status">🛡️ پرائیویسی گارڈ ایکٹیو</div>
+        <div class="logo">🦅 البرکات سپر مارکیٹ</div>
+        <div class="status">🛡️ سیکیورٹی لیول: کمانڈو ایکٹیو | پرائیویسی شیلڈ آن</div>
     </div>
 
     <div id="gate" class="gate-screen">
-        <div class="pro-card" onclick="startApp('dealer')">
-            <h1 style="color: var(--neon);">🏢 ڈیلر</h1>
-            <p>آرڈر دیں، کام کروائیں، بزنس بڑھائیں</p>
-            <button class="btn-action">ڈیش بورڈ میں داخل ہوں</button>
+        <div class="pro-card" onclick="enterApp('dealer')">
+            <h1 style="color: var(--neon);">🏢 ڈیلر لاگ ان</h1>
+            <p>آرڈرز دیں، بزنس بڑھائیں، کمائیں</p>
+            <button class="btn-action">ڈیش بورڈ میں جائیں</button>
         </div>
-        <div class="pro-card" onclick="startApp('worker')">
-            <h1 style="color: var(--gold);">🛠️ ورکر</h1>
-            <p>اپنی مہارت دکھائیں، پروجیکٹس مکمل کریں</p>
+        <div class="pro-card" onclick="enterApp('worker')">
+            <h1 style="color: var(--gold);">🛠️ ورکر لاگ ان</h1>
+            <p>اپنی مہارت دکھائیں، کام کریں</p>
             <button class="btn-action" style="background: var(--gold);">کام شروع کریں</button>
         </div>
     </div>
 
-    <div id="dashboard" class="main-container" style="display: none;">
-        <button class="back-home" onclick="location.reload()">⬅️ لاگ آؤٹ</button>
-        
+    <div id="dashboard" class="dashboard-container">
+        <div class="sidebar">
+            <h3 id="panelTag" style="color: var(--neon); text-align: center;">پروفائل</h3>
+            <div class="nav-item" onclick="showTab('home')">🏠 ہوم ڈیش بورڈ</div>
+            <div class="nav-item" onclick="showTab('projects')">📦 میرے پروجیکٹس</div>
+            <div class="nav-item" onclick="showTab('chat')">💬 محفوظ کمیونیکیشن</div>
+            <div class="nav-item" onclick="showTab('vault')">💰 تجوری (Wallet)</div>
+            <div class="nav-item" onclick="showTab('security')">⚙️ پرائیویسی سیٹنگز</div>
+            <button onclick="location.reload()" style="margin-top:20px; width:100%; padding:10px; background:red; color:white; border:none; border-radius:8px; cursor:pointer;">لاگ آؤٹ</button>
+        </div>
+
         <div class="content">
-            <h1 id="userTitle"></h1>
+            <h1 id="welcomeTitle"></h1>
             
-            <div class="stat-grid">
-                <div class="stat-box"><h3>💰 والٹ</h3><p id="wallet">$0.00</p></div>
-                <div class="stat-box"><h3>📦 ایکٹیو آرڈرز</h3><p id="ordersCount">0</p></div>
-                <div class="stat-box"><h3>⭐ ریٹنگ</h3><p>5.0 (نیو سیلر)</p></div>
+            <div id="homeTab">
+                <div class="stat-grid">
+                    <div class="stat-box"><h3>💰 تجوری کا بیلنس</h3><p>$0.00</p></div>
+                    <div class="stat-box"><h3>📦 فعال پروجیکٹس</h3><p>0</p></div>
+                    <div class="stat-box"><h3>⭐ ریٹنگ</h3><p>5.0 (نیو)</p></div>
+                </div>
             </div>
 
             <div class="glow-border" style="border: 1px solid #333; padding: 20px; border-radius: 20px;">
-                <h2>🎙️ کمانڈو کمیونیکیشن سینٹر</h2>
-                <div style="width: 100%; height: 180px; background: #222; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; color: var(--gold);">
+                <h2 style="color: gold;">🎙️ AI کمانڈو کمیونیکیشن (آواز + ٹائپنگ)</h2>
+                <p style="font-size: 12px; color: #888;"></p>
+                <div style="width: 100%; height: 150px; background: #222; border-radius: 15px; display: flex; align-items: center; justify-content: center; border: 1px dashed #444; color: var(--neon);">
                     📹 محفوظ ویڈیو کال اور اسکرین شیئر (انکرپٹڈ)
                 </div>
                 
                 <div class="chat-section">
-                    <div id="chats" style="flex: 1; padding: 20px; overflow-y: auto;">سسٹم: محفوظ چیٹ شروع کریں...</div>
-                    <div style="padding: 15px; display: flex; gap: 10px;">
-                        <input type="text" id="inp" placeholder="پیغام لکھیں..." style="flex: 1; padding: 12px; border-radius: 10px; border: none; background: #111; color: white;">
-                        <button class="btn-action" style="background: var(--gold);" onclick="voice()">🎙️ بولیں</button>
-                        <button class="btn-action" onclick="send()">بھیجیں</button>
+                    <div id="chats" class="chats">سسٹم میسج: محفوظ چیٹ شروع کریں...</div>
+                    <div class="input-bar">
+                        <input type="text" id="userInput" placeholder="اپنا پیغام لکھیں...">
+                        <button class="icon-btn" style="background: var(--gold);" onclick="startVoice()">🎙️ بولیں</button>
+                        <button class="icon-btn" style="background: var(--neon);" onclick="send()">بھیجیں</button>
                     </div>
                 </div>
             </div>
@@ -84,36 +104,39 @@
 </div>
 
 <script>
-    function startApp(role) {
+    function enterApp(role) {
         document.getElementById('gate').style.display = 'none';
         document.getElementById('dashboard').style.display = 'flex';
-        document.getElementById('userTitle').innerText = (role === 'dealer') ? "🏢 ڈیلر ڈیش بورڈ" : "🛠️ ورکر ڈیش بورڈ";
+        document.getElementById('panelTag').innerText = (role === 'dealer') ? "🏢 ڈیلر ڈیش بورڈ" : "🛠️ ورکر ڈیش بورڈ";
+        document.getElementById('welcomeTitle').innerText = (role === 'dealer') ? "کلائنٹ ڈیش بورڈ میں خوش آمدید" : "ورکر ڈیش بورڈ میں خوش آمدید";
         speak(role === 'dealer' ? "ڈیلر پورٹل ایکٹیو۔ آپ کا بزنس تیار ہے" : "ورکر پورٹل ایکٹیو۔ نئے کام کے لیے تیار ہو جائیں");
     }
 
     function send() {
-        let msg = document.getElementById('inp').value;
-        if(!msg) return;
+        let input = document.getElementById('userInput').value;
+        if(!input) return;
 
-        // سیکیورٹی گارڈ
-        const privacyGuard = /[0-9]{10,13}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-        if(privacyGuard.test(msg)) {
-            alert("پرائیویسی الرٹ: ای میل یا نمبر شیئر کرنا منع ہے!");
-            msg = "[بلاک شدہ]";
+        // پرائیویسی فلٹر
+        const privacyCheck = /[0-9]{10,13}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+        if(privacyCheck.test(input)) {
+            alert("⚠️ سیکیورٹی الرٹ: ای میل یا نمبر شیئر کرنا منع ہے!");
+            input = " [محفوظ ڈیٹا] ";
+            speak("ذاتی معلومات شیئر کرنا منع ہے۔");
         }
 
-        document.getElementById('chats').innerHTML += `<div><b>آپ:</b> ${msg}</div>`;
-        document.getElementById('inp').value = "";
+        document.getElementById('chats').innerHTML += `<div><b>آپ:</b> ${input}</div>`;
+        document.getElementById('userInput').value = "";
     }
 
-    function speak(t) {
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'ur-PK';
-        window.speechSynthesis.speak(u);
+    function speak(text) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'ur-PK';
+        window.speechSynthesis.speak(msg);
     }
 
-    function voice() {
-        speak("جی مالک، میں آپ کی آواز سن رہا ہوں۔");
+    function startVoice() {
+        // یہاں AI کی آواز کا سسٹم شروع کرنے کا آئیڈیا ہے
+        speak("جی مالک، میں آپ کی آواز سن رہا ہوں، اپنا حکم بولیں۔");
     }
 </script>
 
