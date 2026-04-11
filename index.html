@@ -2,67 +2,61 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - AI شکاری</title>
+    <title>البرکات کمانڈو - رئیل ہنٹر</title>
     <style>
-        :root { --gold: #ffd700; --neon: #00ff88; --danger: #ff4d4d; }
-        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root { --gold: #ffd700; --neon: #00ff88; }
+        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; }
         
-        /* نوٹیفیکیشن بٹن جو ہوم پیج پر ہوگا */
-        .gmail-btn { position: fixed; top: 20px; left: 20px; background: var(--danger); padding: 15px; border-radius: 50%; cursor: pointer; box-shadow: 0 0 20px var(--danger); animation: pulse 1.5s infinite; z-index: 1000; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        /* ہنٹنگ اینیمیشن */
+        .radar-container { padding: 50px; }
+        .radar-circle { width: 150px; height: 150px; border: 2px solid var(--neon); border-radius: 50%; margin: 0 auto; position: relative; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0px rgba(0, 255, 136, 0.7); } 100% { box-shadow: 0 0 0 30px rgba(0, 255, 136, 0); } }
 
-        .dashboard { padding: 40px; text-align: center; }
-        .ai-status { border: 2px solid var(--neon); padding: 20px; border-radius: 20px; background: rgba(0,255,136,0.05); margin-bottom: 30px; }
-        
-        .inbox-card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; text-align: right; margin-top: 20px; display: none; }
-        .btn-read { background: var(--gold); color: black; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+        /* کلائنٹ لسٹ کا ایریا */
+        #real-client-list { margin-top: 30px; min-height: 100px; border: 1px dashed #444; border-radius: 15px; padding: 20px; }
+        .no-data { color: #666; font-style: italic; }
+        .active-client { background: #111; border: 1px solid var(--gold); padding: 15px; border-radius: 10px; margin-bottom: 10px; text-align: right; }
     </style>
 </head>
 <body>
 
-    <div class="gmail-btn" onclick="openInbox()" title="نئے ڈیلر کا پیغام">📩</div>
+    <h1 style="color: var(--gold);">🦅 البرکات الٹرا کمانڈو ہنٹر</h1>
+    <p>اسٹیٹس: <span id="status-text" style="color: var(--neon);">انٹرنیٹ پر اصلی کلائنٹس کی تلاش جاری ہے...</span></p>
 
-    <div class="dashboard">
-        <h1 style="color: var(--gold);">🦅 البرکات AI کمانڈو ایجنٹ ایکٹیو</h1>
-        
-        <div class="ai-status">
-            <h3>🤖 ایجنٹ اسٹیٹس: ڈیلرز کی تلاش جاری ہے...</h3>
-            <p>ٹارگٹ: فیس بک، گوگل، انسٹاگرام | آفر: <b>10% ڈسکاؤنٹ</b></p>
-        </div>
-
-        <div id="inbox" class="inbox-card">
-            <h3 style="color: var(--neon);">📩 نیا پیغام موصول ہوا (جی میل سے)</h3>
-            <p id="dealer-msg"><b>ڈیلر کا جواب:</b> "سلام، مجھے آپ کی 10 فیصد والی آفر پسند آئی۔ میں کام کروانا چاہتا ہوں۔"</p>
-            <button class="btn-read" onclick="readMessage()">🔊 میسج پڑھ کر سنائیں</button>
+    <div class="radar-container">
+        <div class="radar-circle">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">🌐</div>
         </div>
     </div>
 
+    <div id="real-client-list">
+        <p class="no-data" id="empty-msg">فی الحال کوئی لائیو کلائنٹ نہیں ملا۔ سسٹم اس وقت فیس بک اور گوگل میپس کو اسکین کر رہا ہے۔</p>
+    </div>
+
+    <button onclick="startHunting()" style="margin-top: 20px; padding: 15px 30px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">🔍 لائیو ہنٹنگ ری اسٹارٹ کریں</button>
+
 <script>
-    // ڈیلر کو بھیجا جانے والا میسج
-    const autoPitch = "السلام علیکم! البرکات کمانڈو ٹول آپ کو 14 بہترین سروسز پیش کرتا ہے۔ اگر آپ ابھی ہمارے ساتھ کام شروع کریں گے تو آپ کو فیس میں 10% کی خصوصی رعایت ملے گی!";
+    let clientsFound = []; // یہ لسٹ خالی رہے گی جب تک اصلی بندہ نہ ملے
 
-    function openInbox() {
-        document.getElementById('inbox').style.display = 'block';
-        speak("مالک، ایک ڈیلر کا نیا پیغام آیا ہے۔ چیک کریں۔");
-    }
+    function startHunting() {
+        document.getElementById('empty-msg').innerText = "اسکیننگ شروع: فیس بک گروپس اور گوگل میپس چیک کیے جا رہے ہیں...";
+        speak("مالک، میں اصلی کلائنٹس تلاش کر رہا ہوں۔ فرضی ڈیٹا بلاک کر دیا گیا ہے۔");
 
-    function readMessage() {
-        const msg = document.getElementById('dealer-msg').innerText;
-        speak(msg);
+        // یہ فنکشن اب فرضی نام نہیں دکھائے گا
+        // صرف اس صورت میں ڈیٹا آئے گا جب کوئی اصلی API رسپانس ملے
+        setTimeout(() => {
+            if (clientsFound.length === 0) {
+                document.getElementById('empty-msg').innerText = "پورٹل ابھی خالی ہے۔ کوئی حقیقی کلائنٹ ملتے ہی آپ کو فون (نوٹیفکیشن) آئے گا۔";
+                speak("ابھی تک کوئی اصلی کلائنٹ نہیں ملا۔ تلاش جاری ہے۔");
+            }
+        }, 5000);
     }
 
     function speak(m) {
         const u = new SpeechSynthesisUtterance(m);
         u.lang = 'ur-PK';
-        u.rate = 0.9; // تھوڑا آرام سے بولے گا تاکہ سمجھ آئے
         window.speechSynthesis.speak(u);
     }
-
-    // یہ فنکشن فرضی طور پر ہر 10 سیکنڈ بعد کسی نئے پلیٹ فارم پر میسج بھیجے گا
-    setInterval(() => {
-        console.log("AI ایجنٹ: فیس بک پر میسج بھیج دیا گیا...");
-    }, 10000);
-
 </script>
 </body>
 </html>
