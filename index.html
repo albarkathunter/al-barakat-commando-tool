@@ -530,4 +530,21 @@
     window.addEventListener('load', () => {
         AlBarakat10X.activateTrustGuards();
     });
-</script>
+</script>// البرکات ویو کنٹرولر - یہ طے کرے گا کہ کسے کیا دکھانا ہے
+function checkUserAccess() {
+    const isOwner = localStorage.getItem('al_barakat_admin'); // یہ صرف آپ کے فون/لیپ ٹاپ پر ہوگا
+
+    if (!isOwner) {
+        // اگر گاہک ہے، تو اسے صرف سائن اپ اور فارم دکھاؤ
+        document.getElementById('admin-dashboard').style.display = 'none'; // آپ کی ذاتی رپورٹ چھپا دیں
+        document.getElementById('signup-section').style.display = 'block'; // سائن اپ دکھائیں
+        console.log("البرکات الرٹ: گاہک کے لیے سائن اپ پیج کھول دیا گیا ہے۔");
+    } else {
+        // اگر آپ ہیں، تو پورا سسٹم دکھاؤ
+        document.getElementById('admin-dashboard').style.display = 'block';
+        document.getElementById('signup-section').style.display = 'none';
+    }
+}
+
+// پیج لوڈ ہوتے ہی چیک کریں
+window.onload = checkUserAccess;
