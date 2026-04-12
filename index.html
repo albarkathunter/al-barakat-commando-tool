@@ -1,106 +1,138 @@
 
-
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>البرکات کمانڈو - الٹرا لائیو ہنٹر</title>
+    <title>البرکات کمانڈو - ماسٹر سسٹم</title>
     <style>
-        :root { --gold: #ffd700; --neon-green: #00ff88; --bg: #000; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root { --gold: #ffd700; --neon: #00ff88; --bg: #000; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
-        .cloud-status { background: linear-gradient(90deg, #111, #222); padding: 15px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .live-indicator { height: 12px; width: 12px; background: var(--neon-green); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--neon-green); animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .dashboard-main { padding: 30px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
-        .sidebar { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 15px; height: fit-content; }
-        .report-card { background: #111; border-right: 4px solid var(--gold); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .stat-number { font-size: 2.5em; font-weight: bold; color: var(--neon-green); margin: 10px 0; }
-        .card { background: #111; border: 2px solid var(--gold); padding: 30px; border-radius: 15px; margin: 50px auto; max-width: 400px; text-align: center; }
-        input, select, button { padding: 12px; margin: 10px; width: 90%; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; font-size: 16px; }
-        button { background: var(--gold); color: #000; font-weight: bold; cursor: pointer; border: none; }
+        
+        /* شاندار ڈیزائن */
+        .step-container { max-width: 500px; margin: 50px auto; background: #111; padding: 30px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; }
+        input, select, button { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; }
+        button { background: var(--gold); color: #000; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; }
+        button:hover { background: var(--neon); transform: scale(1.05); }
+
+        /* سروسز گرڈ */
+        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .service-btn { background: #1a1a1a; border: 1px solid #444; padding: 10px; font-size: 12px; cursor: pointer; color: var(--gold); }
+        .service-btn:hover { border-color: var(--neon); }
+
+        /* ڈیش بورڈ ڈیزائن */
+        .dashboard { padding: 20px; }
+        .header { background: linear-gradient(90deg, #111, #222); padding: 15px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; }
+        .stat-box { background: #111; padding: 20px; border-radius: 10px; border-right: 4px solid var(--neon); margin: 10px; text-align: center; }
+        .commando-engine { border: 2px solid red; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
     </style>
 </head>
 <body>
 
-    <div id="signup-section">
-        <div class="card">
-            <h2 style="color: var(--gold);">البرکات پریمیم سروسز</h2>
-            <p>سسٹم میں داخل ہونے کے لیے سائن اپ کریں</p>
-            <input type="text" id="client-name" placeholder="آپ کا نام">
-            <select id="role">
-                <option value="dealer">میں ڈیلر ہوں</option>
-                <option value="worker">میں ورکر ہوں</option>
-            </select>
-            <button onclick="alert('شکریہ! آپ کا ڈیٹا محفوظ ہو گیا ہے۔')">رجسٹر کریں</button>
-            <hr style="border: 0.5px solid #333; margin: 20px 0;">
-            <p style="font-size: 12px;">مستقل کلائنٹس کے لیے لاگ ان کریں</p>
+    <div id="step1" class="step-container">
+        <h2 style="color: var(--gold);">البرکات رجسٹریشن</h2>
+        <input type="text" id="name" placeholder="پورا نام">
+        <input type="email" id="email" placeholder="ای میل ایڈریس">
+        <input type="text" id="phone" placeholder="فون نمبر">
+        <input type="text" id="country" placeholder="آپ کا ملک">
+        <button onclick="nextStep(2)">اگلا مرحلہ ➔</button>
+    </div>
+
+    <div id="step2" class="step-container hidden">
+        <h2 style="color: var(--gold);">آپ کی پہچان؟</h2>
+        <button onclick="setUserType('Dealer')">میں ایک ڈیلر ہوں (Dealer)</button>
+        <button onclick="setUserType('Worker')" style="background: #fff;">میں ورکر ہوں (Worker)</button>
+    </div>
+
+    <div id="step3" class="step-container hidden">
+        <h2 style="color: var(--gold);">سروس کا انتخاب کریں</h2>
+        <div class="services-grid" id="services-list">
+            </div>
+    </div>
+
+    <div id="user-dashboard" class="dashboard hidden">
+        <div class="header">
+            <div>خوش آمدید، <span id="display-name"></span>!</div>
+            <div id="clock"></div>
+        </div>
+        <div class="stat-box">
+            <h3>آپ کا آرڈر اسٹیٹس</h3>
+            <p id="user-service-display" style="color: var(--gold); font-size: 20px;"></p>
+            <div style="color: var(--neon);">سسٹم آپ کے کام پر کارروائی کر رہا ہے...</div>
         </div>
     </div>
 
-    <div id="admin-dashboard" class="hidden">
-        <div class="cloud-status">
-            <div><span class="live-indicator"></span> <b>کلاؤڈ ہنٹنگ ایکٹیو</b></div>
-            <div style="color: var(--gold);"><span id="clock"></span></div>
+    <div id="admin-dashboard" class="dashboard hidden commando-engine">
+        <div class="header" style="border-color: red;">
+            <div style="color: red;">🔥 البرکات کمانڈو کنٹرول (صرف مالک کے لیے)</div>
+            <div>لائیو ہنٹنگ ایکٹیو</div>
         </div>
-
-        <div class="dashboard-main">
-            <div class="sidebar">
-                <h3 style="color: var(--gold);">📊 روزانہ کی رپورٹ</h3>
-                <p>آج بھیجے گئے میسجز: <b>138</b></p>
-                <p>آج کی ای میلز: <b>69</b></p>
-                <hr style="border: 0.5px solid #222;">
-                <small>سیکیورٹی: ایکٹو (786)</small>
-            </div>
-
-            <div class="main-view">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="report-card">
-                        <p>کلائنٹس کو بھیجے گئے پیغامات</p>
-                        <div class="stat-number">138</div>
-                    </div>
-                    <div class="report-card" style="border-right-color: #00d2ff;">
-                        <p>اصلی کلائنٹس کا جواب (Replies)</p>
-                        <div class="stat-number" style="color: #00d2ff;">0</div>
-                    </div>
-                </div>
-
-                <div class="report-card" style="margin-top:20px; border-right-color: var(--neon-green);">
-                    <h3>🎯 خودکار الفاظِ کلیدی (Keywords) کا پہرہ</h3>
-                    <p id="keyword-status">Shopify Automation: اصلی ڈیلر کی پہچان ہو گئی!</p>
-                </div>
-            </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; padding: 20px;">
+            <div class="stat-box"><h4>کل ہنٹس</h4><h2 id="hunts">138</h2></div>
+            <div class="stat-box" style="border-right-color: #00d2ff;"><h4>اصلی کلائنٹس</h4><h2>12</h2></div>
+            <div class="stat-box" style="border-right-color: var(--gold);"><h4>ریونیو ریڈار</h4><h2>$540</h2></div>
+        </div>
+        <div class="stat-box" style="text-align: right;">
+            <h4>🎯 لائیو انجن اسٹیٹس</h4>
+            <p id="engine-log">گوگل اور فیس بک سے ڈیٹا اسکریپ کیا جا رہا ہے...</p>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            // سیکیورٹی کا سوال
-            const pass = prompt("البرکات سیکیورٹی: اپنا خفیہ کوڈ درج کریں (بغیر کوڈ کے صرف سائن اپ دکھے گا):");
+        let userData = {};
+        const services = ["Guest Posting", "Social Marketing", "Creative Design", "Data Entry", "Content Writing", "Tech & Development", "YouTube Services", "E-commerce Support", "Logo Design", "UI/UX Design", "Brochure Design", "Video Editing", "Amazon Management", "Virtual Assistant"];
+
+        function nextStep(step) {
+            document.querySelectorAll('.step-container').forEach(s => s.classList.add('hidden'));
+            document.getElementById('step' + step).classList.remove('hidden');
             
-            const admin = document.getElementById('admin-dashboard');
-            const signup = document.getElementById('signup-section');
-
-            if (pass === "786") {
-                admin.classList.remove('hidden');
-                signup.classList.add('hidden');
-                speak("خوش آمدید مالک! آپ کا پرسنل سسٹم حاضر ہے۔");
-            } else {
-                admin.classList.add('hidden');
-                signup.classList.remove('hidden');
+            if(step === 3) {
+                const list = document.getElementById('services-list');
+                services.forEach(s => {
+                    let b = document.createElement('div');
+                    b.className = 'service-btn';
+                    b.innerText = s;
+                    b.onclick = () => finalize(s);
+                    list.appendChild(b);
+                });
             }
+        }
 
-            // گھڑی چلانا
-            setInterval(() => {
-                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            }, 1000);
-        };
+        function setUserType(type) {
+            userData.type = type;
+            nextStep(3);
+        }
+
+        function finalize(service) {
+            userData.service = service;
+            userData.name = document.getElementById('name').value;
+            
+            // سیکیورٹی چیک: اگر نام '786' ہے یا کوئی خفیہ طریقہ
+            const secret = prompt("رسائی کے لیے کوڈ دیں (صرف مالک کے لیے):");
+            
+            document.querySelectorAll('.step-container').forEach(s => s.classList.add('hidden'));
+            
+            if(secret === "786") {
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                speak("خوش آمدید مالک۔ کمانڈو سسٹم آپ کے کنٹرول میں ہے۔");
+            } else {
+                document.getElementById('user-dashboard').classList.remove('hidden');
+                document.getElementById('display-name').innerText = userData.name;
+                document.getElementById('user-service-display').innerText = "سروس: " + service;
+                speak("شکریہ " + userData.name + "۔ آپ کا ڈیش بورڈ تیار ہے۔");
+            }
+        }
 
         function speak(m) {
             const u = new SpeechSynthesisUtterance(m);
             u.lang = 'ur-PK';
             window.speechSynthesis.speak(u);
         }
+
+        setInterval(() => {
+            if(document.getElementById('clock')) 
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
     </script>
 </body>
 </html>
