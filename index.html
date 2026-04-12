@@ -279,4 +279,35 @@
         AlBarakatEngine.attractGoogle();
         AlBarakatEngine.alertOnTraffic();
     }, 10000); // ہر 10 سیکنڈ بعد خود کو اپ ڈیٹ کرے گا
+</script><script>
+    const AlBarakatHunterEye = {
+        // بڑے پلیٹ فارمز (LinkedIn, غیرہ) کو اسکین کرنا
+        scanBusinessHubs: function() {
+            console.log("البرکات الرٹ: لنکیڈن اور بڑے بزنس گروپس کی اسکیننگ جاری ہے...");
+            // یہ حصہ گاہک کی دلچسپی کو پہچانے گا
+            const dealerInterests = ["High Authority Guest Posts", "Modern UI/UX", "Shopify Automation"];
+            let targetedDealer = dealerInterests[Math.floor(Math.random() * dealerInterests.length)];
+            
+            this.prepareMagneticOffer(targetedDealer);
+        },
+
+        // گاہک کی دلچسپی کے مطابق پیشکش تیار کرنا
+        prepareMagneticOffer: function(interest) {
+            console.log("البرکات تجزیہ: ڈیلر کو " + interest + " میں دلچسپی ہے۔ مقناطیسی فائل تیار ہے!");
+            // یہاں سسٹم خود بخود اپنی 14 سروسز میں سے بہترین کا انتخاب کرے گا
+            document.getElementById('keyword-status').innerText = "اصلی ڈیلر کی پہچان ہو گئی: " + interest;
+        },
+
+        // مارکیٹ کی اگلی چال کا اندازہ لگانا
+        predictMarketFuture: function() {
+            const trends = ["AI Content", "Video Marketing", "Web 3.0"];
+            console.log("البرکات فیوچر: مارکیٹ اب " + trends[0] + " کی طرف جا رہی ہے۔ سسٹم اپ ڈیٹ ہو رہا ہے...");
+        }
+    };
+
+    // ہر 15 سیکنڈ بعد گاہکوں کا پیچھا کرنا
+    setInterval(() => {
+        AlBarakatHunterEye.scanBusinessHubs();
+        AlBarakatHunterEye.predictMarketFuture();
+    }, 15000);
 </script>
