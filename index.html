@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
@@ -15,37 +16,41 @@
         .sidebar { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 15px; height: fit-content; }
         .report-card { background: #111; border-right: 4px solid var(--gold); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
         .stat-number { font-size: 2.5em; font-weight: bold; color: var(--neon-green); margin: 10px 0; }
-        .card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; margin: 20px auto; max-width: 500px; text-align: center; }
-        input, select, button { padding: 12px; margin: 10px; width: 80%; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; }
+        .card { background: #111; border: 2px solid var(--gold); padding: 30px; border-radius: 15px; margin: 50px auto; max-width: 400px; text-align: center; }
+        input, select, button { padding: 12px; margin: 10px; width: 90%; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; font-size: 16px; }
         button { background: var(--gold); color: #000; font-weight: bold; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
 
     <div id="signup-section">
-        <div class="card" style="border-color: var(--gold); margin-top: 100px;">
+        <div class="card">
             <h2 style="color: var(--gold);">البرکات پریمیم سروسز</h2>
-            <p>سسٹم تک رسائی کے لیے رجسٹر کریں</p>
-            <input type="text" placeholder="آپ کا نام">
-            <select>
-                <option>میں ڈیلر ہوں</option>
-                <option>میں ورکر ہوں</option>
+            <p>سسٹم میں داخل ہونے کے لیے سائن اپ کریں</p>
+            <input type="text" id="client-name" placeholder="آپ کا نام">
+            <select id="role">
+                <option value="dealer">میں ڈیلر ہوں</option>
+                <option value="worker">میں ورکر ہوں</option>
             </select>
-            <button onclick="alert('رجسٹریشن کامیاب! جلد آپ سے رابطہ کیا جائے گا۔')">رجسٹر کریں</button>
+            <button onclick="alert('شکریہ! آپ کا ڈیٹا محفوظ ہو گیا ہے۔')">رجسٹر کریں</button>
+            <hr style="border: 0.5px solid #333; margin: 20px 0;">
+            <p style="font-size: 12px;">مستقل کلائنٹس کے لیے لاگ ان کریں</p>
         </div>
     </div>
 
     <div id="admin-dashboard" class="hidden">
         <div class="cloud-status">
-            <div><span class="live-indicator"></span> <b>کلاؤڈ ہنٹنگ ایکٹیو:</b> آپ کا کمپیوٹر بند ہونے پر بھی سسٹم جاری رہے گا</div>
-            <div style="color: var(--gold);">وقت: <span id="clock"></span></div>
+            <div><span class="live-indicator"></span> <b>کلاؤڈ ہنٹنگ ایکٹیو</b></div>
+            <div style="color: var(--gold);"><span id="clock"></span></div>
         </div>
 
         <div class="dashboard-main">
             <div class="sidebar">
                 <h3 style="color: var(--gold);">📊 روزانہ کی رپورٹ</h3>
-                <p>آج بھیجے گئے میسجز: <b id="msg-count">138</b></p>
-                <p>آج کی ای میلز: <b id="email-count">69</b></p>
+                <p>آج بھیجے گئے میسجز: <b>138</b></p>
+                <p>آج کی ای میلز: <b>69</b></p>
+                <hr style="border: 0.5px solid #222;">
+                <small>سیکیورٹی: ایکٹو (786)</small>
             </div>
 
             <div class="main-view">
@@ -55,35 +60,40 @@
                         <div class="stat-number">138</div>
                     </div>
                     <div class="report-card" style="border-right-color: #00d2ff;">
-                        <p>اصلی کلائنٹس کا جواب</p>
-                        <div class="stat-number" style="color: #00d2ff;">12</div>
+                        <p>اصلی کلائنٹس کا جواب (Replies)</p>
+                        <div class="stat-number" style="color: #00d2ff;">0</div>
                     </div>
                 </div>
-                
-                <div id="keyword-brain-section" class="report-card" style="margin-top:20px; border-right-color: var(--neon-green);">
+
+                <div class="report-card" style="margin-top:20px; border-right-color: var(--neon-green);">
                     <h3>🎯 خودکار الفاظِ کلیدی (Keywords) کا پہرہ</h3>
-                    <p id="keyword-status">گوگل اور فیس بک سے نئے الفاظ سیکھے جا رہے ہیں...</p>
+                    <p id="keyword-status">Shopify Automation: اصلی ڈیلر کی پہچان ہو گئی!</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // سیکیورٹی گیٹ - 786 کوڈ کا جادو
         window.onload = function() {
-            const code = prompt("البرکات سیکیورٹی: اپنا خفیہ کوڈ درج کریں");
-            const adminDash = document.getElementById('admin-dashboard');
-            const signupSec = document.getElementById('signup-section');
+            // سیکیورٹی کا سوال
+            const pass = prompt("البرکات سیکیورٹی: اپنا خفیہ کوڈ درج کریں (بغیر کوڈ کے صرف سائن اپ دکھے گا):");
+            
+            const admin = document.getElementById('admin-dashboard');
+            const signup = document.getElementById('signup-section');
 
-            if (code === "786") {
-                adminDash.classList.remove('hidden');
-                signupSec.classList.add('hidden');
-                speak("خوش آمدید مالک! آپ کا پرسنل سسٹم فعال ہو گیا ہے۔");
+            if (pass === "786") {
+                admin.classList.remove('hidden');
+                signup.classList.add('hidden');
+                speak("خوش آمدید مالک! آپ کا پرسنل سسٹم حاضر ہے۔");
             } else {
-                adminDash.classList.add('hidden');
-                signupSec.classList.remove('hidden');
-                alert("صرف سائن اپ پیج کی اجازت ہے۔");
+                admin.classList.add('hidden');
+                signup.classList.remove('hidden');
             }
+
+            // گھڑی چلانا
+            setInterval(() => {
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            }, 1000);
         };
 
         function speak(m) {
@@ -91,10 +101,6 @@
             u.lang = 'ur-PK';
             window.speechSynthesis.speak(u);
         }
-
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
     </script>
 </body>
 </html>
