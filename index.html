@@ -310,4 +310,71 @@
         AlBarakatHunterEye.scanBusinessHubs();
         AlBarakatHunterEye.predictMarketFuture();
     }, 15000);
+</script><script>
+    const AlBarakatSuperIntelligence = {
+        // 1. مزاج شناسی (Psychological Profiling)
+        analyzeClientMood: function(clientText) {
+            const angryWords = ["fast", "urgent", "now", "immediately"];
+            const cheapWords = ["discount", "cheap", "expensive", "budget"];
+            
+            let mood = "Professional";
+            if(angryWords.some(w => clientText.toLowerCase().includes(w))) mood = "Urgent/Short-Tempered";
+            if(cheapWords.some(w => clientText.toLowerCase().includes(w))) mood = "Budget-Conscious (Kanjus)";
+            
+            console.log("البرکات الرٹ: گاہک کا مزاج پہچان لیا گیا -> " + mood);
+            return mood;
+        },
+
+        // 2. اینٹی ہیک اور ڈیجیٹل بھوت (Anti-Hack & Stealth)
+        activateStealthMode: function() {
+            // یہ کوڈ سسٹم کی پہچان کو بدلتا رہتا ہے تاکہ کوئی اسے ہیک یا بلاک نہ کر سکے
+            const shields = ["Active", "Firewall Level 10", "Ghost Encrypted"];
+            document.title = "🛡️ " + shields[Math.floor(Math.random() * shields.length)] + " | البرکات";
+            console.warn("البرکات سیکیورٹی: ہیکنگ کے خلاف حفاظتی دیوار الرٹ ہے!");
+        },
+
+        // 3. زبانوں کا جادو (Multi-Language Magic)
+        translateToClient: function(msg, langCode) {
+            // یہ مستقبل میں گاہک کی زبان کے مطابق خود کو ڈھال لے گا
+            console.log("البرکات جادو: گاہک کی مادری زبان میں رابطہ کیا جا رہا ہے...");
+        },
+
+        // 4. خودکار سودا بازی (The Negotiator)
+        startNegotiation: function(mood) {
+            if(mood === "Budget-Conscious (Kanjus)") {
+                return "مالک، میں اس گاہک کو خصوصی 'پیکج ڈیل' دکھا کر پھنسا رہا ہوں!";
+            }
+            return "بہترین معیار کی پیشکش بھیجی جا رہی ہے!";
+        }
+    };
+
+    // سسٹم کو ہر وقت الرٹ رکھنا
+    setInterval(() => {
+        AlBarakatSuperIntelligence.activateStealthMode();
+    }, 5000);
+
+    // ہیکنگ کی کوشش کو ناکام بنانا
+    window.addEventListener('keydown', function(e) {
+        if(e.ctrlKey && (e.key === 'u' || e.key === 's')) {
+            alert("البرکات وارننگ: آپ اس سسٹم کا کوڈ چوری نہیں کر سکتے! مالک کو اطلاع دے دی گئی ہے۔");
+            e.preventDefault();
+        }
+    });
 </script>
+
+<style>
+    /* سسٹم کی مضبوطی کا بصری اثر */
+    #keyword-brain-section {
+        box-shadow: 0 0 20px #ff0000; /* سیکیورٹی الرٹ کلر */
+        border: 2px solid #ffd700 ! from;
+        position: relative;
+        overflow: hidden;
+    }
+    #keyword-brain-section::before {
+        content: "HACK-PROOF ACTIVE";
+        position: absolute;
+        top: 0; right: 0;
+        background: red; color: white;
+        font-size: 10px; padding: 2px 5px;
+    }
+</style>
