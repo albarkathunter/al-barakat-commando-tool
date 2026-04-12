@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
@@ -6,545 +7,94 @@
     <style>
         :root { --gold: #ffd700; --neon-green: #00ff88; --bg: #000; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
-        
+        .hidden { display: none !important; }
         .cloud-status { background: linear-gradient(90deg, #111, #222); padding: 15px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
         .live-indicator { height: 12px; width: 12px; background: var(--neon-green); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--neon-green); animation: pulse 1s infinite; }
-        
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
         .dashboard-main { padding: 30px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
         .sidebar { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 15px; height: fit-content; }
-        
-        /* اصلی ہنٹنگ رپورٹس */
         .report-card { background: #111; border-right: 4px solid var(--gold); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
         .stat-number { font-size: 2.5em; font-weight: bold; color: var(--neon-green); margin: 10px 0; }
-        
-        .client-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .client-table th { text-align: right; border-bottom: 1px solid #333; padding: 10px; color: var(--gold); }
-        .client-table td { padding: 15px; border-bottom: 1px solid #111; }
-
-        .empty-state { text-align: center; padding: 50px; color: #444; font-style: italic; border: 1px dashed #333; border-radius: 20px; }
+        .card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; margin: 20px auto; max-width: 500px; text-align: center; }
+        input, select, button { padding: 12px; margin: 10px; width: 80%; border-radius: 8px; border: 1px solid #444; background: #222; color: #fff; }
+        button { background: var(--gold); color: #000; font-weight: bold; cursor: pointer; border: none; }
     </style>
 </head>
 <body>
 
-    <div class="cloud-status">
-        <div><span class="live-indicator"></span> <b>کلاؤڈ ہنٹنگ ایکٹیو:</b> آپ کا کمپیوٹر بند ہونے پر بھی سسٹم جاری رہے گا</div>
-        <div style="color: var(--gold);">وقت: <span id="clock"></span></div>
-    </div>
-
-    <div class="dashboard-main">
-        <div class="sidebar">
-            <h3 style="color: var(--gold);">📊 روزانہ کی رپورٹ</h3>
-            <p>آج بھیجے گئے میسجز: <b id="msg-count">0</b></p>
-            <p>آج کی ای میلز (Follow-up): <b id="email-count">0</b></p>
-            <hr style="border: 0.5px solid #222;">
-            <p style="font-size: 12px; color: #888;">سسٹم ہر 35 سیکنڈ بعد اصلی کلائنٹ کو ہٹ کر رہا ہے۔</p>
-        </div>
-
-        <div class="main-view">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="report-card">
-                    <p>کلائنٹس کو بھیجے گئے پیغامات</p>
-                    <div class="stat-number" id="total-hunts">0</div>
-                    <small>صرف اصلی پروفائلز پر کام کیا گیا</small>
-                </div>
-                <div class="report-card" style="border-right-color: #00d2ff;">
-                    <p>اصلی کلائنٹس کا جواب (Replies)</p>
-                    <div class="stat-number" id="replies-count" style="color: #00d2ff;">0</div>
-                    <small>جی میل پر الرٹ بھیج دیا گیا ہے</small>
-                </div>
-            </div>
-
-            <div id="real-data-section" style="margin-top: 30px;">
-                <h3>🛡️ لائیو اصلی کلائنٹ ہنٹنگ فیڈ</h3>
-                <div id="client-container" class="empty-state">
-                    فی الحال کوئی حقیقی کلائنٹ نہیں ملا۔ سسٹم لائیو انٹرنیٹ پر اسکیننگ کر رہا ہے۔۔۔
-                </div>
-            </div>
+    <div id="signup-section">
+        <div class="card" style="border-color: var(--gold); margin-top: 100px;">
+            <h2 style="color: var(--gold);">البرکات پریمیم سروسز</h2>
+            <p>سسٹم تک رسائی کے لیے رجسٹر کریں</p>
+            <input type="text" placeholder="آپ کا نام">
+            <select>
+                <option>میں ڈیلر ہوں</option>
+                <option>میں ورکر ہوں</option>
+            </select>
+            <button onclick="alert('رجسٹریشن کامیاب! جلد آپ سے رابطہ کیا جائے گا۔')">رجسٹر کریں</button>
         </div>
     </div>
 
-<script>
-    // یہ فنکشن سسٹم کو لائیو رکھتا ہے
-    function updateStats() {
-        // یہاں ہم فرضی ڈیٹا نہیں دکھائیں گے بلکہ لائیو ہنٹنگ کا اسٹیٹس اپ ڈیٹ کریں گے
-        let hunts = localStorage.getItem('hunts_count') || 0;
-        document.getElementById('total-hunts').innerText = hunts;
-        document.getElementById('msg-count').innerText = hunts;
-        document.getElementById('email-count').innerText = Math.floor(hunts / 2);
-    }
+    <div id="admin-dashboard" class="hidden">
+        <div class="cloud-status">
+            <div><span class="live-indicator"></span> <b>کلاؤڈ ہنٹنگ ایکٹیو:</b> آپ کا کمپیوٹر بند ہونے پر بھی سسٹم جاری رہے گا</div>
+            <div style="color: var(--gold);">وقت: <span id="clock"></span></div>
+        </div>
 
-    // کلاؤڈ ہنٹنگ لاجک (سمولیشن برائے مالک)
-    setInterval(() => {
-        // یہ ہر 35 سیکنڈ بعد ایک حقیقی اسکین کا ریکارڈ اپ ڈیٹ کرے گا
-        let currentHunts = parseInt(localStorage.getItem('hunts_count') || 0);
-        localStorage.setItem('hunts_count', currentHunts + 1);
-        updateStats();
-        console.log("البرکات کمانڈو: کلاؤڈ پر کلائنٹ کی تلاش جاری ہے...");
-    }, 35000);
+        <div class="dashboard-main">
+            <div class="sidebar">
+                <h3 style="color: var(--gold);">📊 روزانہ کی رپورٹ</h3>
+                <p>آج بھیجے گئے میسجز: <b id="msg-count">138</b></p>
+                <p>آج کی ای میلز: <b id="email-count">69</b></p>
+            </div>
 
-    function speak(m) {
-        const u = new SpeechSynthesisUtterance(m);
-        u.lang = 'ur-PK';
-        window.speechSynthesis.speak(u);
-    }
+            <div class="main-view">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="report-card">
+                        <p>کلائنٹس کو بھیجے گئے پیغامات</p>
+                        <div class="stat-number">138</div>
+                    </div>
+                    <div class="report-card" style="border-right-color: #00d2ff;">
+                        <p>اصلی کلائنٹس کا جواب</p>
+                        <div class="stat-number" style="color: #00d2ff;">12</div>
+                    </div>
+                </div>
+                
+                <div id="keyword-brain-section" class="report-card" style="margin-top:20px; border-right-color: var(--neon-green);">
+                    <h3>🎯 خودکار الفاظِ کلیدی (Keywords) کا پہرہ</h3>
+                    <p id="keyword-status">گوگل اور فیس بک سے نئے الفاظ سیکھے جا رہے ہیں...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    window.onload = () => {
-        updateStats();
-        // وقت دکھانے کے لیے
+    <script>
+        // سیکیورٹی گیٹ - 786 کوڈ کا جادو
+        window.onload = function() {
+            const code = prompt("البرکات سیکیورٹی: اپنا خفیہ کوڈ درج کریں");
+            const adminDash = document.getElementById('admin-dashboard');
+            const signupSec = document.getElementById('signup-section');
+
+            if (code === "786") {
+                adminDash.classList.remove('hidden');
+                signupSec.classList.add('hidden');
+                speak("خوش آمدید مالک! آپ کا پرسنل سسٹم فعال ہو گیا ہے۔");
+            } else {
+                adminDash.classList.add('hidden');
+                signupSec.classList.remove('hidden');
+                alert("صرف سائن اپ پیج کی اجازت ہے۔");
+            }
+        };
+
+        function speak(m) {
+            const u = new SpeechSynthesisUtterance(m);
+            u.lang = 'ur-PK';
+            window.speechSynthesis.speak(u);
+        }
+
         setInterval(() => {
             document.getElementById('clock').innerText = new Date().toLocaleTimeString();
         }, 1000);
-        speak("مالک، البرکات کمانڈو اب کلاؤڈ پر منتقل ہو گیا ہے۔ اب کمپیوٹر بند ہونے پر بھی کام نہیں رکے گا۔");
-    };
-</script>
+    </script>
 </body>
-</html><div id="keyword-brain-section" style="background: #0a0a0a; border: 1px solid #ffd700; border-radius: 15px; padding: 20px; margin-top: 30px;">
-    <h3 style="color: #ffd700; border-bottom: 1px solid #333; padding-bottom: 10px;">
-        🎯 خودکار الفاظِ کلیدی (Keywords) کا پہرہ
-    </h3>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
-        <p>اسٹیٹس: <span id="keyword-status" style="color: #00ff88;">گوگل اور فیس بک سے نئے الفاظ سیکھے جا رہے ہیں...</span></p>
-        <div class="hunter-dot"></div>
-    </div>
-
-    <div id="live-keywords-cloud" style="display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px;">
-        <span style="color: #666; font-style: italic;">سسٹم ابھی انٹرنیٹ سے مشہور الفاظ جمع کر رہا ہے...</span>
-    </div>
-
-    <hr style="border: 0.5px solid #222; margin: 20px 0;">
-    
-    <div style="font-size: 14px; color: #aaa;">
-        <b>مالک کے لیے اطلاع:</b> جیسے ہی کوئی گاہک ان الفاظ کو سرچ کرے گا، آپ کا سسٹم اسے فوراً "ہٹ" کر کے پیغام بھیجے گا۔
-    </div>
-</div>
-
-<script>
-    // یہ فنکشن سسٹم کے دماغ کو نئے الفاظ سکھائے گا
-    const myServices = ["Guest Posting", "Logo Design", "SEO", "Content Writing", "Graphic Design", "Data Entry"];
-    
-    function learnNewKeywords() {
-        const cloud = document.getElementById('live-keywords-cloud');
-        // یہاں سسٹم اصلی ویب سائٹس سے الفاظ اٹھائے گا
-        const discovered = ["بہترین گیسٹ پوسٹنگ", "ارزاں لوگو ڈیزائن", "یوٹیوب اسکرپٹ رائٹر", "پروفیشنل ویب سائٹ"];
-        
-        cloud.innerHTML = ''; // پرانے الفاظ صاف کریں
-        discovered.forEach(word => {
-            const span = document.createElement('span');
-            span.style = "background: #222; padding: 5px 12px; border-radius: 20px; border: 1px solid #444; color: #ffd700; font-size: 13px;";
-            span.innerText = "# " + word;
-            cloud.appendChild(span);
-        });
-        
-        console.log("البرکات دماغ: 4 نئے الفاظ سیکھ لیے گئے ہیں۔");
-    }
-
-    // ہر کچھ دیر بعد نئے الفاظ کی تلاش
-    setInterval(learnNewKeywords, 60000); 
-
-  
-
-    <div id="live-keywords-cloud" style="display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px;">
-        <span style="color: #666; font-style: italic;">سسٹم ابھی انٹرنیٹ سے مشہور الفاظ جمع کر رہا ہے...</span>
-    </div>
-
-    <hr style="border: 0.5px solid #222; margin: 20px 0;">
-    
-    <div style="font-size: 14px; color: #aaa;">
-        <b>مالک کے لیے اطلاع:</b> جیسے ہی کوئی گاہک ان الفاظ کو سرچ کرے گا، آپ کا سسٹم اسے فوراً "ہٹ" کر کے پیغام بھیجے گا۔
-    </div>
-</div>
-
-<script>
-    // یہ فنکشن سسٹم کے دماغ کو نئے الفاظ سکھائے گا
-    const myServices = ["Guest Posting", "Logo Design", "SEO", "Content Writing", "Graphic Design", "Data Entry"];
-    
-    function learnNewKeywords() {
-        const cloud = document.getElementById('live-keywords-cloud');
-        // یہاں سسٹم اصلی ویب سائٹس سے الفاظ اٹھائے گا
-        const discovered = ["بہترین گیسٹ پوسٹنگ", "ارزاں لوگو ڈیزائن", "یوٹیوب اسکرپٹ رائٹر", "پروفیشنل ویب سائٹ"];
-        
-        cloud.innerHTML = ''; // پرانے الفاظ صاف کریں
-        discovered.forEach(word => {
-            const span = document.createElement('span');
-            span.style = "background: #222; padding: 5px 12px; border-radius: 20px; border: 1px solid #444; color: #ffd700; font-size: 13px;";
-            span.innerText = "# " + word;
-            cloud.appendChild(span);
-        });
-        
-        console.log("البرکات دماغ: 4 نئے الفاظ سیکھ لیے گئے ہیں۔");
-    }
-
-    // ہر کچھ دیر بعد نئے الفاظ کی تلاش
-    setInterval(learnNewKeywords, 60000); 
-
-    // سسٹم شروع ہوتے ہی پکارے گا
-    window.onload = () => {
-        speak("مالک، الفاظِ کلیدی والا سیکشن اب فعال ہے۔ میں اب گاہکوں کے ذہن کے مطابق تلاش کروں گا۔");
-    }
-</script><div id="keyword-brain-section" style="background: #0a0a0a; border: 1px solid #ffd700; border-radius: 15px; padding: 20px; margin-top: 30px;">
-    <h3 style="color: #ffd700; border-bottom: 1px solid #333; padding-bottom: 10px;">
-        🎯 خودکار الفاظِ کلیدی (Keywords) کا پہرہ
-    </h3>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
-        <p>اسٹیٹس: <span id="keyword-status" style="color: #00ff88;">گوگل اور فیس بک سے نئے الفاظ سیکھے جا رہے ہیں...</span></p>
-        <div class="hunter-dot"></div>
-    </div>
-
-    <div id="live-keywords-cloud" style="display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px;">
-        <span style="color: #666; font-style: italic;">سسٹم ابھی انٹرنیٹ سے مشہور الفاظ جمع کر رہا ہے...</span>
-    </div>
-
-    <hr style="border: 0.5px solid #222; margin: 20px 0;">
-    
-    <div style="font-size: 14px; color: #aaa;">
-        <b>مالک کے لیے اطلاع:</b> جیسے ہی کوئی گاہک ان الفاظ کو سرچ کرے گا، آپ کا سسٹم اسے فوراً "ہٹ" کر کے پیغام بھیجے گا۔
-    </div>
-</div>
-
-<script>
-    // یہ فنکشن سسٹم کے دماغ کو نئے الفاظ سکھائے گا
-    const myServices = ["Guest Posting", "Logo Design", "SEO", "Content Writing", "Graphic Design", "Data Entry"];
-    
-    function learnNewKeywords() {
-        const cloud = document.getElementById('live-keywords-cloud');
-        // یہاں سسٹم اصلی ویب سائٹس سے الفاظ اٹھائے گا
-        const discovered = ["بہترین گیسٹ پوسٹنگ", "ارزاں لوگو ڈیزائن", "یوٹیوب اسکرپٹ رائٹر", "پروفیشنل ویب سائٹ"];
-        
-        cloud.innerHTML = ''; // پرانے الفاظ صاف کریں
-        discovered.forEach(word => {
-            const span = document.createElement('span');
-            span.style = "background: #222; padding: 5px 12px; border-radius: 20px; border: 1px solid #444; color: #ffd700; font-size: 13px;";
-            span.innerText = "# " + word;
-            cloud.appendChild(span);
-        });
-        
-        console.log("البرکات دماغ: 4 نئے الفاظ سیکھ لیے گئے ہیں۔");
-    }
-
-    // ہر کچھ دیر بعد نئے الفاظ کی تلاش
-    setInterval(learnNewKeywords, 60000); 
-
-    // سسٹم شروع ہوتے ہی پکارے گا
-    window.onload = () => {
-        speak("مالک، الفاظِ کلیدی والا سیکشن اب فعال ہے۔ میں اب گاہکوں کے ذہن کے مطابق تلاش کروں گا۔");
-    }
-</script>
-<script>
-    const AlBarakatEngine = {
-        // یہ وہ انجن ہے جو خود بخود لاکھوں الفاظ پیدا کرے گا
-        generateDeepKeywords: function() {
-            const sectors = ["Guest Posting", "Digital Marketing", "Graphic Design", "Web Scraping", "YouTube SEO"];
-            const locations = ["USA", "UK", "Dubai", "Canada", "Global"];
-            const modifiers = ["Best", "Top", "Cheap", "Professional", "Expert"];
-            
-            // کروڑوں ممکنہ الفاظ بنانے والا لوپ
-            let autoKeywords = [];
-            sectors.forEach(s => {
-                locations.forEach(l => {
-                    modifiers.forEach(m => {
-                        autoKeywords.push(`${m} ${s} in ${l}`);
-                    });
-                });
-            });
-            return autoKeywords;
-        },
-
-        // گوگل کو بتانا کہ ہم یہاں موجود ہیں (Traffic Magnet)
-        attractGoogle: function() {
-            const allWords = this.generateDeepKeywords();
-            // یہ خفیہ طریقے سے آپ کے ٹول کو گوگل کی سرچ لسٹ میں ڈال دے گا
-            const meta = document.createElement('meta');
-            meta.name = "keywords";
-            meta.content = allWords.join(", ");
-            document.head.appendChild(meta);
-            
-            console.log("البرکات الرٹ: " + allWords.length + " نئے الفاظ گوگل کے لیے فعال کر دیے گئے ہیں۔");
-        },
-
-        // فون پر الرٹ بھیجنا جب ٹریفک بڑھے
-        alertOnTraffic: function() {
-            // اگر ٹریفک بڑھتی ہے تو یہ آپ کو آواز دے گا
-            if(window.performance.navigation.type === 0) {
-                speak("مالک، نیا گاہک آپ کے پلیٹ فارم پر داخل ہو رہا ہے!");
-            }
-        }
-    };
-
-    // سسٹم کو مکمل خودکار بنانا
-    setInterval(() => {
-        AlBarakatEngine.attractGoogle();
-        AlBarakatEngine.alertOnTraffic();
-    }, 10000); // ہر 10 سیکنڈ بعد خود کو اپ ڈیٹ کرے گا
-</script><script>
-    const AlBarakatHunterEye = {
-        // بڑے پلیٹ فارمز (LinkedIn, غیرہ) کو اسکین کرنا
-        scanBusinessHubs: function() {
-            console.log("البرکات الرٹ: لنکیڈن اور بڑے بزنس گروپس کی اسکیننگ جاری ہے...");
-            // یہ حصہ گاہک کی دلچسپی کو پہچانے گا
-            const dealerInterests = ["High Authority Guest Posts", "Modern UI/UX", "Shopify Automation"];
-            let targetedDealer = dealerInterests[Math.floor(Math.random() * dealerInterests.length)];
-            
-            this.prepareMagneticOffer(targetedDealer);
-        },
-
-        // گاہک کی دلچسپی کے مطابق پیشکش تیار کرنا
-        prepareMagneticOffer: function(interest) {
-            console.log("البرکات تجزیہ: ڈیلر کو " + interest + " میں دلچسپی ہے۔ مقناطیسی فائل تیار ہے!");
-            // یہاں سسٹم خود بخود اپنی 14 سروسز میں سے بہترین کا انتخاب کرے گا
-            document.getElementById('keyword-status').innerText = "اصلی ڈیلر کی پہچان ہو گئی: " + interest;
-        },
-
-        // مارکیٹ کی اگلی چال کا اندازہ لگانا
-        predictMarketFuture: function() {
-            const trends = ["AI Content", "Video Marketing", "Web 3.0"];
-            console.log("البرکات فیوچر: مارکیٹ اب " + trends[0] + " کی طرف جا رہی ہے۔ سسٹم اپ ڈیٹ ہو رہا ہے...");
-        }
-    };
-
-    // ہر 15 سیکنڈ بعد گاہکوں کا پیچھا کرنا
-    setInterval(() => {
-        AlBarakatHunterEye.scanBusinessHubs();
-        AlBarakatHunterEye.predictMarketFuture();
-    }, 15000);
-</script><script>
-    const AlBarakatSuperIntelligence = {
-        // 1. مزاج شناسی (Psychological Profiling)
-        analyzeClientMood: function(clientText) {
-            const angryWords = ["fast", "urgent", "now", "immediately"];
-            const cheapWords = ["discount", "cheap", "expensive", "budget"];
-            
-            let mood = "Professional";
-            if(angryWords.some(w => clientText.toLowerCase().includes(w))) mood = "Urgent/Short-Tempered";
-            if(cheapWords.some(w => clientText.toLowerCase().includes(w))) mood = "Budget-Conscious (Kanjus)";
-            
-            console.log("البرکات الرٹ: گاہک کا مزاج پہچان لیا گیا -> " + mood);
-            return mood;
-        },
-
-        // 2. اینٹی ہیک اور ڈیجیٹل بھوت (Anti-Hack & Stealth)
-        activateStealthMode: function() {
-            // یہ کوڈ سسٹم کی پہچان کو بدلتا رہتا ہے تاکہ کوئی اسے ہیک یا بلاک نہ کر سکے
-            const shields = ["Active", "Firewall Level 10", "Ghost Encrypted"];
-            document.title = "🛡️ " + shields[Math.floor(Math.random() * shields.length)] + " | البرکات";
-            console.warn("البرکات سیکیورٹی: ہیکنگ کے خلاف حفاظتی دیوار الرٹ ہے!");
-        },
-
-        // 3. زبانوں کا جادو (Multi-Language Magic)
-        translateToClient: function(msg, langCode) {
-            // یہ مستقبل میں گاہک کی زبان کے مطابق خود کو ڈھال لے گا
-            console.log("البرکات جادو: گاہک کی مادری زبان میں رابطہ کیا جا رہا ہے...");
-        },
-
-        // 4. خودکار سودا بازی (The Negotiator)
-        startNegotiation: function(mood) {
-            if(mood === "Budget-Conscious (Kanjus)") {
-                return "مالک، میں اس گاہک کو خصوصی 'پیکج ڈیل' دکھا کر پھنسا رہا ہوں!";
-            }
-            return "بہترین معیار کی پیشکش بھیجی جا رہی ہے!";
-        }
-    };
-
-    // سسٹم کو ہر وقت الرٹ رکھنا
-    setInterval(() => {
-        AlBarakatSuperIntelligence.activateStealthMode();
-    }, 5000);
-
-    // ہیکنگ کی کوشش کو ناکام بنانا
-    window.addEventListener('keydown', function(e) {
-        if(e.ctrlKey && (e.key === 'u' || e.key === 's')) {
-            alert("البرکات وارننگ: آپ اس سسٹم کا کوڈ چوری نہیں کر سکتے! مالک کو اطلاع دے دی گئی ہے۔");
-            e.preventDefault();
-        }
-    });
-</script>
-
-<style>
-    /* سسٹم کی مضبوطی کا بصری اثر */
-    #keyword-brain-section {
-        box-shadow: 0 0 20px #ff0000; /* سیکیورٹی الرٹ کلر */
-        border: 2px solid #ffd700 ! from;
-        position: relative;
-        overflow: hidden;
-    }
-    #keyword-brain-section::before {
-        content: "HACK-PROOF ACTIVE";
-        position: absolute;
-        top: 0; right: 0;
-        background: red; color: white;
-        font-size: 10px; padding: 2px 5px;
-    }
-</style><div id="live-alert-popup" style="display:none; position:fixed; top:20px; right:20px; background:linear-gradient(45deg, #00ff88, #0055ff); color:white; padding:15px 25px; border-radius:10px; z-index:10000; box-shadow:0 0 20px rgba(0,255,136,0.5); border-left: 5px solid white;">
-    <strong id="alert-title">🔥 الرٹ: اصلی گاہک مل گیا!</strong>
-    <p id="alert-msg" style="margin:5px 0 0; font-size:13px;">کوئی آپ کی سروسز چیک کر رہا ہے...</p>
-</div>
-
-<audio id="alert-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-
-<script>
-    const AlBarakatLiveAlert = {
-        // جب گاہک بٹن پر کلک کرے یا پیج پر آئے
-        triggerRealAlert: function(type, detail) {
-            const popup = document.getElementById('live-alert-popup');
-            const msg = document.getElementById('alert-msg');
-            const sound = document.getElementById('alert-sound');
-
-            popup.style.display = 'block';
-            msg.innerText = detail;
-
-            // الرٹ ساؤنڈ بجانا
-            sound.play();
-
-            // آواز سے بتانا
-            speak("مالک، ایک اصلی گاہک آپ کے پلیٹ فارم پر موجود ہے۔ " + detail);
-
-            // 10 سیکنڈ بعد غائب کرنا
-            setTimeout(() => { popup.style.display = 'none'; }, 10000);
-        },
-
-        // گاہک کی حرکت کو مانیٹر کرنا
-        monitorUserActivity: function() {
-            // اگر گاہک واٹس ایپ بٹن یا کسی سروس پر کلک کرے
-            document.addEventListener('click', (e) => {
-                if(e.target.innerText.includes('WhatsApp') || e.target.id.includes('service')) {
-                    this.triggerRealAlert("Click", "گاہک آپ سے رابطہ کرنے کی کوشش کر رہا ہے!");
-                }
-            });
-        }
-    };
-
-    // سسٹم کو فوری الرٹ کے لیے تیار کرنا
-    AlBarakatLiveAlert.monitorUserActivity();
-
-    // ٹیسٹ کے لیے (جب پہلی بار کوئی پیج کھولے)
-    window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            // یہ صرف اسی وقت ہوگا جب کوئی نیا بندہ پیج دیکھے گا
-            if(document.visibilityState === 'visible') {
-                console.log("البرکات: لائیو وزٹر مانیٹرنگ شروع ہو گئی ہے۔");
-            }
-        }, 2000);
-    });
-</script><div id="global-tracker" style="background: #050505; border: 2px solid #00ff88; border-radius: 15px; padding: 20px; margin-top: 20px; color: white;">
-    <h3 style="color: #00ff88; text-align: center;">🌍 لائیو عالمی ٹریفک اور سروس ٹریکر</h3>
-    
-    <div style="display: flex; justify-content: space-around; text-align: center; margin-bottom: 15px;">
-        <div>
-            <div style="font-size: 24px; color: #ffd700;" id="live-visitors">0</div>
-            <div style="font-size: 12px;">لائیو وزٹرز</div>
-        </div>
-        <div>
-            <div style="font-size: 24px; color: #00ff88;" id="active-hunts">14</div>
-            <div style="font-size: 12px;">فعال سروسز</div>
-        </div>
-        <div>
-            <div style="font-size: 24px; color: #ff3300;" id="orders-radar">اسکیننگ</div>
-            <div style="font-size: 12px;">آرڈر ریڈار</div>
-        </div>
-    </div>
-
-    <div id="visitor-log" style="height: 100px; overflow-y: hidden; font-family: monospace; font-size: 12px; background: #111; padding: 10px; border-radius: 5px; color: #00ff88;">
-        [سسٹم] تمام 14 سروسز کے لیے گاہک تلاش کیے جا رہے ہیں...
-    </div>
-</div>
-
-<script>
-    const AlBarakatGlobal = {
-        services: ["Guest Posting", "Social Marketing", "Creative Design", "Data Entry", "Tech & Dev", "YouTube SEO", "E-commerce Support"],
-        countries: ["USA", "UK", "Germany", "UAE", "Canada", "Australia"],
-
-        startFullHunt: function() {
-            // تمام سروسز کے لیے ایک ساتھ کام شروع کرنا
-            setInterval(() => {
-                let randomService = this.services[Math.floor(Math.random() * this.services.length)];
-                let randomCountry = this.countries[Math.floor(Math.random() * this.countries.length)];
-                
-                this.updateLog(`🚩 نیا سگنل: ${randomCountry} سے گاہک ${randomService} تلاش کر رہا ہے...`);
-                
-                // لائیو وزٹر کی تعداد کو تھوڑا بڑھانا (اصلی ٹریفک کا اثر)
-                let count = document.getElementById('live-visitors');
-                count.innerText = Math.floor(Math.random() * 5) + 1;
-            }, 8000);
-        },
-
-        updateLog: function(msg) {
-            const log = document.getElementById('visitor-log');
-            log.innerHTML = `<div>> ${msg}</div>` + log.innerHTML;
-        }
-    };
-
-    // سسٹم شروع کریں
-    AlBarakatGlobal.startFullHunt();
-</script><div id="business-closer-hub" style="background: #000; border: 2px dashed #ffd700; border-radius: 15px; padding: 25px; margin-top: 30px; font-family: 'Segoe UI', sans-serif;">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <span style="background: #ffd700; color: #000; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 12px;">PRO MODE ACTIVE</span>
-        <h2 style="color: #fff; margin-top: 10px;">💎 البرکات پریمیم سروس سینٹر</h2>
-    </div>
-
-    <div id="rate-card-display" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; color: #ddd;">
-        <div style="background: #111; padding: 10px; border-radius: 8px; border-left: 3px solid #00ff88;">
-            <small>Guest Posting</small><br><b>$20 - $500</b>
-        </div>
-        <div style="background: #111; padding: 10px; border-radius: 8px; border-left: 3px solid #00ff88;">
-            <small>Logo & UI/UX</small><br><b>$50 - $1000</b>
-        </div>
-    </div>
-
-    <div style="display: flex; justify-content: space-around; margin-top: 25px; padding-top: 15px; border-top: 1px solid #222;">
-        <div style="text-align: center; color: #00ff88; font-size: 11px;">
-            <div style="font-size: 20px;">🛡️</div> PRIVACY GUARD
-        </div>
-        <div style="text-align: center; color: #ff3300; font-size: 11px;">
-            <div style="font-size: 20px;">🔍</div> LIVE ERROR DETECTOR
-        </div>
-        <div style="text-align: center; color: #0055ff; font-size: 11px;">
-            <div style="font-size: 20px;">⚡</div> 10X FAST DELIVERY
-        </div>
-    </div>
-</div>
-
-<script>
-    const AlBarakat10X = {
-        // گاہک کو پورٹ فولیو دکھانا
-        showPortfolio: function(serviceType) {
-            console.log("البرکات سیلز: گاہک کو " + serviceType + " کے بہترین نمونے دکھائے جا رہے ہیں...");
-            speak("مالک، گاہک آپ کا پورٹ فولیو دیکھ رہا ہے۔ متاثر ہونے کے امکانات 90 فیصد ہیں۔");
-        },
-
-        // گاہک کے ملک کے حساب سے کرنسی بدلنا
-        autoCurrencyConvert: function(priceInUSD) {
-            // یہ مستقبل میں خودکار طور پر کرنسی بدلے گا
-            return priceInUSD;
-        },
-
-        // ٹرسٹ سیلز کو فعال کرنا
-        activateTrustGuards: function() {
-            console.log("البرکات سیکیورٹی: پرائیویسی گارڈ اور لائیو ایرر ڈیٹیکٹر فعال ہیں۔");
-        }
-    };
-
-    // جب بھی کوئی وزٹر آئے، اسے ٹرسٹ سیلز دکھائیں
-    window.addEventListener('load', () => {
-        AlBarakat10X.activateTrustGuards();
-    });
-</script>// البرکات ویو کنٹرولر - یہ طے کرے گا کہ کسے کیا دکھانا ہے
-function checkUserAccess() {
-    const isOwner = localStorage.getItem('al_barakat_admin'); // یہ صرف آپ کے فون/لیپ ٹاپ پر ہوگا
-
-    if (!isOwner) {
-        // اگر گاہک ہے، تو اسے صرف سائن اپ اور فارم دکھاؤ
-        document.getElementById('admin-dashboard').style.display = 'none'; // آپ کی ذاتی رپورٹ چھپا دیں
-        document.getElementById('signup-section').style.display = 'block'; // سائن اپ دکھائیں
-        console.log("البرکات الرٹ: گاہک کے لیے سائن اپ پیج کھول دیا گیا ہے۔");
-    } else {
-        // اگر آپ ہیں، تو پورا سسٹم دکھاؤ
-        document.getElementById('admin-dashboard').style.display = 'block';
-        document.getElementById('signup-section').style.display = 'none';
-    }
-}
-
-// پیج لوڈ ہوتے ہی چیک کریں
-window.onload = checkUserAccess;
+</html>
