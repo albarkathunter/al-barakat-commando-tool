@@ -377,4 +377,55 @@
         background: red; color: white;
         font-size: 10px; padding: 2px 5px;
     }
-</style>
+</style><div id="live-alert-popup" style="display:none; position:fixed; top:20px; right:20px; background:linear-gradient(45deg, #00ff88, #0055ff); color:white; padding:15px 25px; border-radius:10px; z-index:10000; box-shadow:0 0 20px rgba(0,255,136,0.5); border-left: 5px solid white;">
+    <strong id="alert-title">🔥 الرٹ: اصلی گاہک مل گیا!</strong>
+    <p id="alert-msg" style="margin:5px 0 0; font-size:13px;">کوئی آپ کی سروسز چیک کر رہا ہے...</p>
+</div>
+
+<audio id="alert-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+<script>
+    const AlBarakatLiveAlert = {
+        // جب گاہک بٹن پر کلک کرے یا پیج پر آئے
+        triggerRealAlert: function(type, detail) {
+            const popup = document.getElementById('live-alert-popup');
+            const msg = document.getElementById('alert-msg');
+            const sound = document.getElementById('alert-sound');
+
+            popup.style.display = 'block';
+            msg.innerText = detail;
+
+            // الرٹ ساؤنڈ بجانا
+            sound.play();
+
+            // آواز سے بتانا
+            speak("مالک، ایک اصلی گاہک آپ کے پلیٹ فارم پر موجود ہے۔ " + detail);
+
+            // 10 سیکنڈ بعد غائب کرنا
+            setTimeout(() => { popup.style.display = 'none'; }, 10000);
+        },
+
+        // گاہک کی حرکت کو مانیٹر کرنا
+        monitorUserActivity: function() {
+            // اگر گاہک واٹس ایپ بٹن یا کسی سروس پر کلک کرے
+            document.addEventListener('click', (e) => {
+                if(e.target.innerText.includes('WhatsApp') || e.target.id.includes('service')) {
+                    this.triggerRealAlert("Click", "گاہک آپ سے رابطہ کرنے کی کوشش کر رہا ہے!");
+                }
+            });
+        }
+    };
+
+    // سسٹم کو فوری الرٹ کے لیے تیار کرنا
+    AlBarakatLiveAlert.monitorUserActivity();
+
+    // ٹیسٹ کے لیے (جب پہلی بار کوئی پیج کھولے)
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            // یہ صرف اسی وقت ہوگا جب کوئی نیا بندہ پیج دیکھے گا
+            if(document.visibilityState === 'visible') {
+                console.log("البرکات: لائیو وزٹر مانیٹرنگ شروع ہو گئی ہے۔");
+            }
+        }, 2000);
+    });
+</script>
