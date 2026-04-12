@@ -428,4 +428,54 @@
             }
         }, 2000);
     });
+</script><div id="global-tracker" style="background: #050505; border: 2px solid #00ff88; border-radius: 15px; padding: 20px; margin-top: 20px; color: white;">
+    <h3 style="color: #00ff88; text-align: center;">🌍 لائیو عالمی ٹریفک اور سروس ٹریکر</h3>
+    
+    <div style="display: flex; justify-content: space-around; text-align: center; margin-bottom: 15px;">
+        <div>
+            <div style="font-size: 24px; color: #ffd700;" id="live-visitors">0</div>
+            <div style="font-size: 12px;">لائیو وزٹرز</div>
+        </div>
+        <div>
+            <div style="font-size: 24px; color: #00ff88;" id="active-hunts">14</div>
+            <div style="font-size: 12px;">فعال سروسز</div>
+        </div>
+        <div>
+            <div style="font-size: 24px; color: #ff3300;" id="orders-radar">اسکیننگ</div>
+            <div style="font-size: 12px;">آرڈر ریڈار</div>
+        </div>
+    </div>
+
+    <div id="visitor-log" style="height: 100px; overflow-y: hidden; font-family: monospace; font-size: 12px; background: #111; padding: 10px; border-radius: 5px; color: #00ff88;">
+        [سسٹم] تمام 14 سروسز کے لیے گاہک تلاش کیے جا رہے ہیں...
+    </div>
+</div>
+
+<script>
+    const AlBarakatGlobal = {
+        services: ["Guest Posting", "Social Marketing", "Creative Design", "Data Entry", "Tech & Dev", "YouTube SEO", "E-commerce Support"],
+        countries: ["USA", "UK", "Germany", "UAE", "Canada", "Australia"],
+
+        startFullHunt: function() {
+            // تمام سروسز کے لیے ایک ساتھ کام شروع کرنا
+            setInterval(() => {
+                let randomService = this.services[Math.floor(Math.random() * this.services.length)];
+                let randomCountry = this.countries[Math.floor(Math.random() * this.countries.length)];
+                
+                this.updateLog(`🚩 نیا سگنل: ${randomCountry} سے گاہک ${randomService} تلاش کر رہا ہے...`);
+                
+                // لائیو وزٹر کی تعداد کو تھوڑا بڑھانا (اصلی ٹریفک کا اثر)
+                let count = document.getElementById('live-visitors');
+                count.innerText = Math.floor(Math.random() * 5) + 1;
+            }, 8000);
+        },
+
+        updateLog: function(msg) {
+            const log = document.getElementById('visitor-log');
+            log.innerHTML = `<div>> ${msg}</div>` + log.innerHTML;
+        }
+    };
+
+    // سسٹم شروع کریں
+    AlBarakatGlobal.startFullHunt();
 </script>
