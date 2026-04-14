@@ -3,242 +3,104 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AL-BARAKAT COMMANDO | HIGH-TECH CONTROL</title>
+    <title>AL-BARAKAT COMMANDO | CYBER UI</title>
     <style>
-        :root { --gold: #ffd700; --neon: #00ff88; --bg: #050505; --accent: #ff3300; }
+        :root { --main: #00d2ff; --glow: #00ff88; --dark: #050505; --accent: #ff0055; }
         
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-        body { 
-            background: var(--bg); 
-            background-image: radial-gradient(circle at 2px 2px, #111 1px, transparent 0);
-            background-size: 40px 40px;
-            color: white; 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            margin: 0; 
-            overflow-x: hidden;
+        body, html { margin: 0; padding: 0; height: 100%; background: var(--dark); color: white; font-family: 'Orbitron', sans-serif; overflow-x: hidden; }
+
+        /* متحرک بیک گراؤنڈ */
+        .bg-lines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+                        url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            z-index: -1;
         }
+
+        /* شاندار رجسٹریشن فارم */
+        .auth-gate {
+            max-width: 500px; margin: 100px auto; padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--main);
+            box-shadow: 0 0 20px var(--main), inset 0 0 10px var(--main);
+            border-radius: 0 50px 0 50px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        input, select {
+            width: 100%; padding: 15px; margin: 10px 0; border: 1px solid var(--main);
+            background: rgba(0,0,0,0.5); color: var(--glow); font-size: 16px;
+            border-radius: 5px; outline: none;
+        }
+
+        .btn-cyber {
+            width: 100%; padding: 15px; border: none; background: var(--main);
+            color: black; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 3px;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+        .btn-cyber:hover { background: var(--glow); box-shadow: 0 0 30px var(--glow); }
+
+        /* سروسز گرڈ (آئیکنز کے ساتھ) */
+        .srv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+        .srv-node {
+            padding: 20px; border: 1px solid #333; background: #111;
+            text-align: center; cursor: pointer; border-radius: 10px;
+        }
+        .srv-node:hover { border-color: var(--glow); transform: translateY(-5px); background: #1a1a1a; }
+
+        /* ورکر ڈیش بورڈ */
+        .dash-frame { padding: 30px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
+        .sidebar { background: rgba(0, 210, 255, 0.1); border-left: 3px solid var(--main); padding: 20px; }
+        .main-view { background: rgba(255, 255, 255, 0.02); padding: 30px; border-radius: 20px; border: 1px solid #222; }
+
+        /* لائیو انڈیکیٹر */
+        .live-pulse { width: 12px; height: 12px; background: var(--glow); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 255, 136, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); } }
 
         .hidden { display: none !important; }
-
-        /* پریمیم گلاس کارڈز */
-        .glass-panel {
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            max-width: 600px;
-            margin: 50px auto;
-            text-align: center;
-        }
-
-        h1, h2 { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
-
-        /* ہائی ٹیک ان پٹس */
-        .input-group { position: relative; margin-bottom: 20px; text-align: right; }
-        input, select {
-            width: 100%;
-            padding: 15px;
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-        }
-        input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-
-        .btn-main {
-            background: linear-gradient(45deg, var(--gold), #b8860b);
-            color: black;
-            font-weight: 900;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 18px;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-        }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5); }
-
-        /* سروسز گرڈ */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
-        }
-        .service-card {
-            background: #111;
-            border: 1px solid #222;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .service-card:hover { 
-            border-color: var(--neon); 
-            background: rgba(0, 255, 136, 0.1); 
-            transform: scale(1.05);
-        }
-
-        /* شاہانہ ڈیش بورڈ */
-        .dashboard-container { padding: 40px; min-height: 100vh; }
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111;
-            padding: 20px 40px;
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        .data-card {
-            background: #0a0a0a;
-            padding: 30px;
-            border-radius: 20px;
-            border-left: 5px solid var(--neon);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-        .data-card h3 { color: #888; font-size: 14px; margin: 0; }
-        .data-card .value { font-size: 40px; font-weight: bold; margin: 10px 0; color: var(--neon); }
-
-        /* مالک کا ڈیش بورڈ (خطرناک لک) */
-        .owner-mode { border: 2px solid var(--accent) !important; box-shadow: 0 0 50px rgba(255, 51, 0, 0.15); }
-        .owner-mode .data-card { border-left-color: var(--accent); }
-        .owner-mode .value { color: var(--accent); }
-
-        .scan-line {
-            height: 2px;
-            background: var(--gold);
-            width: 100%;
-            position: absolute;
-            top: 0;
-            animation: scan 4s linear infinite;
-            opacity: 0.3;
-        }
-        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="bg-lines"></div>
 
-    <div id="step1" class="glass-panel">
-        <h1>AL-BARAKAT</h1>
-        <p style="color: #666;">سسٹم تک رسائی کے لیے اپنی شناخت درج کریں</p>
-        <div class="input-group"><input type="text" id="fname" placeholder="پورا نام"></div>
-        <div class="input-group"><input type="email" id="femail" placeholder="ای میل ایڈریس"></div>
-        <div class="input-group"><input type="text" id="fphone" placeholder="واٹس ایپ نمبر"></div>
-        <div class="input-group"><input type="text" id="fcountry" placeholder="آپ کا ملک"></div>
-        <button class="btn-main" onclick="goTo(2)">تصدیق کریں ➔</button>
+    <div id="step1" class="auth-gate">
+        <h1 style="color: var(--main);">ACCESS GRANTED</h1>
+        <p style="font-size: 12px;">البرکات کمانڈو نیٹ ورک میں شامل ہوں</p>
+        <input type="text" id="fname" placeholder="NAME_">
+        <input type="email" id="femail" placeholder="EMAIL_">
+        <input type="text" id="fphone" placeholder="PHONE_">
+        <input type="text" id="fcountry" placeholder="COUNTRY_">
+        <button class="btn-cyber" onclick="show(2)">Next_</button>
     </div>
 
-    <div id="step2" class="glass-panel hidden">
-        <h2>پلیٹ فارم رول منتخب کریں</h2>
-        <div style="display: flex; gap: 20px; margin-top: 30px;">
-            <button class="btn-main" onclick="setRole('Dealer')">DEALER</button>
-            <button class="btn-main" onclick="setRole('Worker')" style="background: white;">WORKER</button>
-        </div>
+    <div id="step2" class="auth-gate hidden">
+        <h2 style="color: var(--main);">SELECT IDENTITY</h2>
+        <button class="btn-cyber" onclick="setRole('Dealer')" style="margin-bottom: 10px;">DEALER_</button>
+        <button class="btn-cyber" onclick="setRole('Worker')" style="background: white; color: black;">WORKER_</button>
     </div>
 
-    <div id="step3" class="glass-panel hidden" style="max-width: 800px;">
-        <h2>سروس سینٹر</h2>
-        <div class="services-grid" id="srv-list"></div>
+    <div id="step3" class="auth-gate hidden" style="max-width: 900px;">
+        <h2 style="color: var(--main);">SYSTEM SERVICES</h2>
+        <div class="srv-grid" id="services"></div>
     </div>
 
-    <div id="client-dash" class="dashboard-container hidden">
-        <div class="top-nav">
-            <div style="font-size: 20px; font-weight: bold; color: var(--gold);">البرکات پریمیم لاؤنج</div>
-            <div id="clock">00:00:00</div>
+    <div id="worker-dash" class="dash-frame hidden">
+        <div class="sidebar">
+            <h3 style="color: var(--main);">COMMANDO_USER</h3>
+            <p>اسٹیٹس: <span class="live-pulse"></span> آن لائن</p>
+            <hr border="1" color="#222">
+            <p>رینک: لیول 1</p>
+            <p>کمائی: $0.00</p>
         </div>
-        <div class="stats-row">
-            <div class="data-card">
-                <h3>فعال سروس</h3>
-                <div class="value" id="user-srv">None</div>
-            </div>
-            <div class="data-card" style="border-left-color: var(--gold);">
-                <h3>آرڈر اسٹیٹس</h3>
-                <div class="value" style="color: var(--gold);">ACTIVE</div>
-            </div>
-        </div>
-        <div class="glass-panel" style="margin-top: 40px; max-width: 100%;">
-            <p>آپ کا ڈیٹا کلاؤڈ پر محفوظ ہے۔ ہمارا مینیجر آپ سے رابطہ کرے گا۔</p>
-        </div>
-    </div>
-
-    <div id="owner-dash" class="dashboard-container hidden owner-mode">
-        <div class="scan-line"></div>
-        <div class="top-nav" style="border-color: var(--accent);">
-            <div style="font-size: 20px; font-weight: bold; color: var(--accent);">⚠️ البرکات کمانڈو کنٹرول</div>
-            <div id="clock-admin">00:00:00</div>
-        </div>
-        <div class="stats-row">
-            <div class="data-card"><h3>کلائنٹ ہنٹس</h3><div class="value">138</div></div>
-            <div class="data-card"><h3>کامیاب سودے</h3><div class="value">12</div></div>
-            <div class="data-card"><h3>نیٹ ریونیو</h3><div class="value">$540</div></div>
-        </div>
-        <div class="glass-panel" style="max-width: 100%; text-align: left; font-family: monospace; color: var(--accent);">
-            > لائیو ٹریفک مانیٹرنگ فعال ہے... <br>
-            > گوگل میپس سے ڈیٹا اسکریپ کیا جا رہا ہے... <br>
-            > 7 نئے کلائنٹس پائپ لائن میں ہیں...
-        </div>
-    </div>
-
-    <script>
-        const services = ["Guest Posting", "Social Marketing", "Creative Design", "Data Entry", "Content Writing", "Tech & Development", "YouTube Services", "E-commerce Support", "Logo Design", "UI/UX Design", "Brochure Design", "Video Editing", "Amazon Management", "Virtual Assistant"];
-        let user = {};
-
-        function goTo(s) {
-            document.querySelectorAll('.glass-panel, .dashboard-container').forEach(d => d.classList.add('hidden'));
-            document.getElementById('step' + s).classList.remove('hidden');
-            if(s === 3) {
-                const list = document.getElementById('srv-list');
-                list.innerHTML = '';
-                services.forEach(item => {
-                    let card = document.createElement('div');
-                    card.className = 'service-card';
-                    card.innerText = item;
-                    card.onclick = () => launch(item);
-                    list.appendChild(card);
-                });
-            }
-        }
-
-        function setRole(r) { user.role = r; goTo(3); }
-
-        function launch(srv) {
-            user.name = document.getElementById('fname').value;
-            const code = prompt("سیکیورٹی کوڈ درج کریں (صرف مالک کے لیے)");
-            
-            document.querySelectorAll('.glass-panel').forEach(d => d.classList.add('hidden'));
-            
-            if(code === "786") {
-                document.getElementById('owner-dash').classList.remove('hidden');
-                speak("خوش آمدید مالک۔ کمانڈو ٹول اب آپ کے ہاتھ میں ہے۔");
-            } else {
-                document.getElementById('client-dash').classList.remove('hidden');
-                document.getElementById('user-srv').innerText = srv;
-                speak("شکریہ " + user.name + "۔ آپ کا کام شروع ہو گیا ہے۔");
-            }
-        }
-
-        function speak(m) {
-            const u = new SpeechSynthesisUtterance(m);
-            u.lang = 'ur-PK';
-            window.speechSynthesis.speak(u);
-        }
-
-        setInterval(() => {
-            const time = new Date().toLocaleTimeString();
-            document.getElementById('clock').innerText = time;
-            document.getElementById('clock-admin').innerText = time;
-        }, 1000);
-    </script>
-</body>
-</html>
+        <div class="main-view">
+            <h1 id="user-welcome">خوش آمدید</h1>
+            <div style="background: #111; padding: 20px; border-radius: 10px; border-right: 5px solid var(--glow);">
+                <h3>فعال مشن</h3>
+                <p id="active-srv" style="color: var(--glow); font-size: 24px;"></p>
+                <div style="width: 100%; height: 10px; background: #222; border-radius: 5px;">
+                    <div style="width: 30%; height: 100%; background: var(--glow); border-radius: 5px;"></div>
+                </div>
+                <small>آرڈر پر کارروائی ہو رہی
