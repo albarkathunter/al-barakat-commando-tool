@@ -2,113 +2,121 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AL-BARAKAT | VOICE SECURE HUB</title>
+    <title>AL-BARAKAT | THE 4 COMMANDO STAGES</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
     <style>
-        :root { --gold: #ffd700; --cyan: #00d2ff; --neon: #00ff88; --dark: #000; }
-        body { background: var(--dark); color: white; font-family: 'Orbitron', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        :root { --gold: #ffd700; --cyan: #00d2ff; --dark: #000; --neon: #00ff88; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
+        .page { min-height: 100vh; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* مائیک اینیمیشن */
-        .mic-gate { text-align: center; cursor: pointer; }
-        .mic-icon { width: 100px; height: 100px; background: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 50px; margin: 0 auto 20px; box-shadow: 0 0 20px var(--cyan); transition: 0.5s; }
-        .listening { animation: pulse 1.5s infinite; background: red; box-shadow: 0 0 40px red; }
+        /* ہائی ٹیک کارڈز */
+        .cyber-box { background: rgba(10,10,10,0.95); border: 2px solid var(--cyan); border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; box-shadow: 0 0 30px var(--cyan); text-align: center; }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--cyan); background: #000; color: white; }
+        .btn-action { background: var(--cyan); color: #000; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        /* سروسز گریڈ */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; width: 100%; }
+        .s-item { background: #111; padding: 15px; border: 1px solid var(--gold); border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .s-item:hover { background: var(--gold); color: black; }
 
-        /* آفس ڈیش بورڈ */
-        .office-frame { width: 90%; height: 90%; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 20px; box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
-        .header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
-        .comm-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .video-box { height: 250px; background: #000; border: 1px solid var(--neon); border-radius: 10px; position: relative; }
-        .chat-area { background: #111; height: 250px; padding: 15px; border-radius: 10px; font-family: monospace; color: var(--neon); overflow-y: auto; }
+        /* ویڈیو کال اور وائس لاک */
+        .video-window { width: 100%; height: 200px; background: #000; border: 2px solid var(--neon); border-radius: 15px; margin: 10px 0; }
+        .mic-lock { font-size: 60px; cursor: pointer; animation: pulse 1s infinite; color: var(--gold); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } }
     </style>
 </head>
 <body>
 
-    <div id="voice-gate" class="mic-gate">
-        <h1 id="status-text" style="color: var(--cyan);">سسٹم لاک ہے</h1>
-        <p>اپنا نام پکاریں (Voice Command)</p>
-        <div id="mic-btn" class="mic-icon" onclick="startListening()">🎤</div>
-        <p style="font-size: 12px; color: #444;">صرف مجاز کمانڈوز کے لیے</p>
+    <div id="page1" class="page">
+        <div class="cyber-box">
+            <h1 style="color: var(--gold);">COMMANDO SIGNUP</h1>
+            <p>سسٹم تک رسائی کے لیے رجسٹر کریں</p>
+            <input type="text" id="reg-name" placeholder="پورا نام">
+            <input type="email" id="reg-email" placeholder="ای میل ایڈریس">
+            <input type="tel" id="reg-phone" placeholder="فون نمبر">
+            <select id="reg-role">
+                <option value="worker">میں ورکر ہوں</option>
+                <option value="dealer">میں ڈیلر ہوں</option>
+            </select>
+            <button class="btn-action" onclick="goToPage(2)">اگلا مرحلہ (Services) ➔</button>
+            <p style="font-size: 10px; cursor: pointer; color: #444;" onclick="openVoiceLock()">ADMIN BYPASS (VOICE)</p>
+        </div>
     </div>
 
-    <div id="master-office" class="office-frame hidden">
-        <div class="header">
-            <h2 style="color: var(--gold);">🔱 البرکات کمانڈو آفس</h2>
-            <div id="user-info" style="color: var(--neon);">مالک: لاگ ان ہے</div>
+    <div id="page2" class="page hidden">
+        <div class="cyber-box" style="max-width: 900px;">
+            <h2 style="color: var(--gold);">البرکات پریمیم سروسز</h2>
+            <div class="service-grid">
+                <div class="s-item">Social Marketing</div><div class="s-item">Guest Posting</div>
+                <div class="s-item">Digital Marketing</div><div class="s-item">Creative Design</div>
+                <div class="s-item">Data Entry</div><div class="s-item">Web Scraping</div>
+                <div class="s-item">Content Writing</div><div class="s-item">WordPress Dev</div>
+                <div class="s-item">Mobile Apps</div><div class="s-item">YouTube SEO</div>
+                <div class="s-item">Video Editing</div><div class="s-item">Amazon Support</div>
+                <div class="s-item">Virtual Assistant</div><div class="s-item">Logo Design</div>
+            </div>
+            <button class="btn-action" style="margin-top: 20px;" onclick="goToPage(3)">اپنا آفس کھولیں ➔</button>
         </div>
-        
-        <div class="comm-box">
-            <div class="video-box">
-                <div style="position: absolute; top: 10px; left: 10px; color: red; font-size: 10px; animation: blink 1s infinite;">● LIVE</div>
-                <p style="text-align: center; margin-top: 100px; color: #333;">ویڈیو سسٹم فعال ہے</p>
-            </div>
-            
-            <div class="chat-area" id="logs">
-                [SYSTEM] وائس ریکگنیشن کامیاب... <br>
-                [SECURE] ہیکنگ پروٹیکشن فعال ہے... <br>
-                [READY] آپ کی فائلیں اپ لوڈ کے لیے تیار ہیں...
-            </div>
+    </div>
+
+    <div id="page3" class="page hidden">
+        <div class="cyber-box" style="max-width: 800px; text-align: right;">
+            <h2 id="user-title" style="color: var(--cyan);">کمانڈو ڈیش بورڈ</h2>
+            <div class="video-window"></div>
+            <textarea placeholder="اپنے لنکس یہاں لکھیں..." style="height: 100px;"></textarea>
+            <div style="border: 1px dashed var(--gold); padding: 15px; margin: 10px 0;">📁 فائل یہاں رکھیں (Work Submission)</div>
+            <button class="btn-action">ڈیٹا سبمٹ کریں</button>
+        </div>
+    </div>
+
+    <div id="page4" class="page hidden">
+        <div id="voice-unlock" class="cyber-box">
+            <h2 style="color: var(--gold);">وائس کمانڈ درکار ہے</h2>
+            <div class="mic-lock" onclick="startVoiceRecognition()">🎤</div>
+            <p id="voice-status">اپنا نام پکاریں...</p>
         </div>
 
-        <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--cyan);"><h4>کلائنٹ لنکس</h4><p>12 ایکٹیو</p></div>
-            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--gold);"><h4>ورکر ڈیٹا</h4><p>138 میسجز</p></div>
-            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--neon);"><h4>سیکیورٹی</h4><p>اعلیٰ ترین</p></div>
+        <div id="owner-office" class="hidden" style="width: 95%;">
+            <h1 style="color: var(--neon);">🔱 البرکات ماسٹر آفس</h1>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="cyber-box" style="margin:0;"><h3>کلائنٹس</h3><h2>138</h2></div>
+                <div class="cyber-box" style="margin:0; border-color: var(--gold);"><h3>ریونیو</h3><h2>$540</h2></div>
+                <div class="cyber-box" style="margin:0; border-color: var(--neon);"><h3>سیکیورٹی</h3><h2>ACTIVE</h2></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // مجاز ناموں کی لسٹ
-        const ALLOWED_NAMES = ["affan jahan", "aman chauhan", "talha husain", "abbas", "harish"];
-
-        function startListening() {
-            const mic = document.getElementById('mic-btn');
-            const status = document.getElementById('status-text');
-            
-            // وائس ریکگنیشن شروع کرنا
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'en-US'; // یا 'ur-PK' بھی کر سکتے ہیں
-
-            mic.classList.add('listening');
-            status.innerText = "سن رہا ہوں...";
-            status.style.color = "red";
-
-            recognition.start();
-
-            recognition.onresult = function(event) {
-                const voiceCommand = event.results[0][0].transcript.toLowerCase();
-                mic.classList.remove('listening');
-                
-                let matched = false;
-                ALLOWED_NAMES.forEach(name => {
-                    if (voiceCommand.includes(name)) matched = true;
-                });
-
-                if (matched) {
-                    openOffice(voiceCommand);
-                } else {
-                    status.innerText = "Access Denied!";
-                    status.style.color = "red";
-                    speak("رسائی کی اجازت نہیں ہے۔ غلط نام۔");
-                }
-            };
-
-            recognition.onerror = function() {
-                mic.classList.remove('listening');
-                status.innerText = "دوبارہ کوشش کریں";
-            };
+        function goToPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page' + pageNum).classList.remove('hidden');
         }
 
-        function openOffice(name) {
-            document.getElementById('voice-gate').classList.add('hidden');
-            document.getElementById('master-office').classList.remove('hidden');
-            document.getElementById('user-info').innerText = "مالک: " + name.toUpperCase();
-            speak("خوش آمدید مالک۔ آپ کا آفس اب کھلا ہے۔");
-            
-            // سسٹم لاگز اپ ڈیٹ کرنا
-            const logs = document.getElementById('logs');
-            logs.innerHTML += `<br> [ACCESS] ${name} نے سسٹم کھول لیا۔`;
+        function openVoiceLock() {
+            goToPage(4);
+        }
+
+        function startVoiceRecognition() {
+            const status = document.getElementById('voice-status');
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+
+            status.innerText = "سن رہا ہوں...";
+
+            recognition.onresult = function(event) {
+                const voice = event.results[0][0].transcript.toLowerCase();
+                // آپ کے مخصوص نام: Affan Jahan, Aman Chauhan, Talha, Abbas, Harish
+                if (voice.includes("affan") || voice.includes("aman") || voice.includes("talha") || voice.includes("abbas") || voice.includes("harish")) {
+                    document.getElementById('voice-unlock').classList.add('hidden');
+                    document.getElementById('owner-office').classList.remove('hidden');
+                    speak("خوش آمدید مالک۔ آپ کا آفس کھل گیا ہے۔");
+                } else {
+                    status.innerText = "رسائی کی اجازت نہیں!";
+                    speak("غلط کمانڈ۔");
+                }
+            };
         }
 
         function speak(text) {
