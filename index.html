@@ -2,124 +2,121 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AL-BARAKAT COMMANDO ULTRA | THE FUTURE</title>
+    <title>AL-BARAKAT | GLOBAL COMMANDO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    
     <style>
-        :root { --gold: #ffd700; --neon-blue: #00d2ff; --neon-green: #00ff88; --dark: #020202; --red: #ff0033; }
-        
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --gold: #ffd700; --cyan: #00d2ff; --bg: #020202; }
+        body { background: var(--bg); color: white; font-family: 'Orbitron', sans-serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
 
-        /* پریمیم بیک گراؤنڈ اور اینیمیشن */
-        .master-bg { position: fixed; width: 100%; height: 100%; background: radial-gradient(circle at center, #111, #000); z-index: -1; }
-        
-        /* ہائی ٹیک کنٹینرز */
-        .panel { 
-            background: rgba(10, 10, 10, 0.9); border: 2px solid var(--gold); border-radius: 20px; 
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1); padding: 40px; max-width: 900px; margin: 50px auto; 
-            backdrop-filter: blur(10px); text-align: center;
+        /* پریمیم سائبر رجسٹریشن */
+        .auth-card {
+            max-width: 550px; margin: 50px auto; padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 30px var(--cyan);
+            border-radius: 20px; text-align: center;
+            position: relative;
         }
 
-        /* ویڈیو کال اور آڈیو بار */
-        .media-hub { display: flex; justify-content: space-around; background: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue); margin: 20px 0; }
-        .video-box { width: 300px; height: 180px; background: #000; border: 2px solid var(--red); border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .video-box::after { content: "LIVE VIDEO"; color: var(--red); font-size: 10px; position: absolute; top: 10px; left: 10px; animation: blink 1s infinite; }
+        /* ان پٹ اسٹائلز */
+        .iti { width: 100%; margin-bottom: 15px; text-align: left; } /* فون ان پٹ کے لیے */
+        input, select {
+            width: 100%; padding: 15px; margin: 10px 0; border: 1px solid var(--cyan);
+            background: #000; color: var(--cyan); border-radius: 5px; outline: none;
+        }
 
-        /* سمارٹ ٹائپنگ انجن */
-        .ai-engine { background: #111; padding: 20px; border-radius: 15px; border-right: 5px solid var(--neon-green); text-align: left; direction: ltr; }
-        #ai-input { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: var(--neon-green); font-family: 'Courier New', monospace; border-radius: 8px; }
-        #ai-output { min-height: 100px; color: #ccc; margin-top: 15px; line-height: 1.6; }
+        .btn-master {
+            width: 100%; padding: 15px; background: var(--cyan); color: black;
+            font-weight: bold; border: none; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
 
-        /* بٹن ڈیزائن */
-        .btn { padding: 15px 30px; font-weight: bold; border-radius: 10px; cursor: pointer; text-transform: uppercase; border: none; margin: 10px; }
-        .btn-gold { background: var(--gold); color: black; box-shadow: 0 0 15px var(--gold); }
-        .btn-voice { background: var(--neon-blue); color: black; }
+        /* مالک کے لیے خفیہ راستہ */
+        .owner-access {
+            position: absolute; top: 10px; right: 10px; font-size: 10px;
+            color: #333; cursor: pointer; text-decoration: underline;
+        }
 
-        @keyframes blink { 50% { opacity: 0; } }
+        /* ڈیش بورڈ لک */
+        .dashboard { padding: 40px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .card { background: #0a0a0a; border-left: 5px solid var(--gold); padding: 25px; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="master-bg"></div>
 
-    <div id="home" class="panel">
-        <h1 style="color: var(--gold); font-size: 45px;">AL-BARAKAT COMMANDO <span style="font-size: 15px; color: white;">v2.0</span></h1>
-        <p style="color: #888;">پریمیم سروسز اور AI ٹولز کا جدید ترین مرکز</p>
+    <div id="auth-page" class="auth-card">
+        <div class="owner-access" onclick="bypass()">ADMIN_BYPASS</div>
+        <h1 style="color: var(--cyan); text-shadow: 0 0 10px var(--cyan);">ACCESS GRANTED</h1>
+        <p>البرکات گلوبل نیٹ ورک</p>
         
-        <div style="margin-top: 30px;">
-            <input type="text" id="u-name" placeholder="پورا نام" style="width: 80%; padding: 15px; background: #111; border: 1px solid #333; color: white; border-radius: 10px; margin-bottom: 10px;">
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button class="btn btn-gold" onclick="launch('Dealer')">ڈیلر موڈ فعال کریں</button>
-                <button class="btn btn-voice" onclick="launch('Worker')">ورکر موڈ فعال کریں</button>
-            </div>
+        <input type="text" id="name" placeholder="پورا نام">
+        
+        <div style="text-align: left; margin: 10px 0;">
+            <input type="tel" id="phone">
         </div>
+
+        <select id="country-list">
+            <option value="">اپنا ملک منتخب کریں...</option>
+            <option value="PK">Pakistan 🇵🇰</option>
+            <option value="US">United States 🇺🇸</option>
+            <option value="GB">United Kingdom 🇬🇧</option>
+            <option value="AE">United Arab Emirates 🇦🇪</option>
+            <option value="SA">Saudi Arabia 🇸🇦</option>
+            <option value="IN">India 🇮🇳</option>
+            <option value="CA">Canada 🇨🇦</option>
+            <option value="AU">Australia 🇦🇺</option>
+            <option value="DE">Germany 🇩🇪</option>
+        </select>
+
+        <button class="btn-master" onclick="login()">سسٹم میں داخل ہوں ➔</button>
     </div>
 
-    <div id="dashboard" class="panel hidden" style="max-width: 1100px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 15px;">
-            <h2 id="role-title" style="color: var(--neon-blue);">COMMANDO DASHBOARD</h2>
-            <div id="status" style="color: var(--neon-green);">● SYSTEM ACTIVE</div>
+    <div id="main-dash" class="dashboard hidden">
+        <h1 style="color: var(--gold);">🔱 البرکات کمانڈو کنٹرول</h1>
+        <div class="stat-grid">
+            <div class="card"><h3>ٹریفک</h3><h2 style="color: var(--cyan);">GLOBAL</h2></div>
+            <div class="card"><h3>کلائنٹس</h3><h2>138</h2></div>
+            <div class="card"><h3>ریونیو</h3><h2 style="color: var(--gold);">$540</h2></div>
         </div>
-
-        <div class="media-hub">
-            <div class="video-box">
-                <span style="color: #444;">کیمرہ آف ہے</span>
-            </div>
-            <div style="text-align: right; flex: 1; padding: 0 20px;">
-                <h3 style="color: var(--gold);">وائس کنٹرول</h3>
-                <button class="btn btn-voice" onclick="startVoice()">مائیک آن کریں 🎤</button>
-                <p id="voice-status" style="font-size: 12px; color: #666;">سسٹم آپ کی آواز سننے کے لیے تیار ہے...</p>
-            </div>
-        </div>
-
-        <div class="ai-engine">
-            <h3 style="color: var(--neon-green);">AL-BARAKAT AI WRITER</h3>
-            <p style="font-size: 12px; color: #666;">کوئی بھی کہانی، اسکرپٹ یا سوال یہاں لکھیں:</p>
-            <input type="text" id="ai-input" placeholder="Ask anything... (e.g. Write a story about a commando)">
-            <button class="btn btn-gold" style="width: 100%;" onclick="runAI()">جواب حاصل کریں ⚡</button>
-            <div id="ai-output">آپ کا جواب یہاں نظر آئے گا...</div>
+        
+        <div style="margin-top: 30px; background: #111; padding: 20px; border: 1px dashed var(--cyan);">
+            <p>> سسٹم لائیو ہے اور دنیا بھر سے کنکشنز مانیٹر کر رہا ہے...</p>
         </div>
     </div>
 
     <script>
-        function launch(role) {
-            const name = document.getElementById('u-name').value;
-            if(!name) { alert("پہلے اپنا نام درج کریں!"); return; }
-            
-            document.getElementById('home').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('role-title').innerText = `${name} | ${role} Mode`;
-            speak(`خوش آمدید مالک ${name}۔ آپ کا البرکات سسٹم فعال ہو چکا ہے۔`);
+        // فون لائبریری کو فعال کرنا
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "pk",
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        function login() {
+            const name = document.getElementById('name').value;
+            if(!name) { alert("نام درج کرنا ضروری ہے!"); return; }
+            showDash();
         }
 
-        // AI اسٹوری ٹیلر فنکشن
-        function runAI() {
-            const query = document.getElementById('ai-input').value;
-            const output = document.getElementById('ai-output');
-            output.innerText = "سسٹم سوچ رہا ہے...";
-            
-            // مصنوعی ذہانت کا جواب (آپ اسے کسی API سے بھی جوڑ سکتے ہیں)
-            setTimeout(() => {
-                if(query.toLowerCase().includes("kahani") || query.toLowerCase().includes("story")) {
-                    output.innerText = "ایک دفعہ کا ذکر ہے کہ البرکات کمانڈو نے دنیا بھر کے ڈیجیٹل سسٹم کو فتح کرنے کا ارادہ کیا۔ اس نے ایک ایسا ٹول بنایا جو آواز، ویڈیو اور عقل کا مجموعہ تھا...";
-                } else {
-                    output.innerText = "آپ کا سوال موصول ہو چکا ہے۔ میں آپ کی سروس کے حوالے سے ڈیٹا اسکین کر رہا ہوں تاکہ آپ کو بہترین جواب دے سکوں۔";
-                }
-                speak("جواب تیار ہے۔");
-            }, 1500);
+        // مالک کے لیے بائی پاس فنکشن
+        function bypass() {
+            const pass = prompt("خفیہ مالک کوڈ درج کریں:");
+            if(pass === "786") {
+                showDash();
+            } else {
+                alert("غلط کوڈ!");
+            }
         }
 
-        function startVoice() {
-            document.getElementById('voice-status').innerText = "آواز ریکارڈ کی جا رہی ہے...";
-            document.getElementById('voice-status').style.color = "var(--red)";
-            setTimeout(() => {
-                document.getElementById('voice-status').innerText = "سگنل موصول ہو گیا!";
-                document.getElementById('voice-status').style.color = "var(--neon-green)";
-            }, 2000);
-        }
-
-        function speak(text) {
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.lang = 'ur-PK';
-            window.speechSynthesis.speak(speech);
+        function showDash() {
+            document.getElementById('auth-page').classList.add('hidden');
+            document.getElementById('main-dash').classList.remove('hidden');
         }
     </script>
 </body>
