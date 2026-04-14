@@ -2,108 +2,113 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AL-BARAKAT COMMANDO | THE ULTIMATE HUB</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <title>AL-BARAKAT | VOICE SECURE HUB</title>
     <style>
-        :root { --gold: #ffd700; --cyan: #00d2ff; --neon: #00ff88; --dark: #000; --sec: #111; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root { --gold: #ffd700; --cyan: #00d2ff; --neon: #00ff88; --dark: #000; }
+        body { background: var(--dark); color: white; font-family: 'Orbitron', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
         .hidden { display: none !important; }
+
+        /* مائیک اینیمیشن */
+        .mic-gate { text-align: center; cursor: pointer; }
+        .mic-icon { width: 100px; height: 100px; background: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 50px; margin: 0 auto 20px; box-shadow: 0 0 20px var(--cyan); transition: 0.5s; }
+        .listening { animation: pulse 1.5s infinite; background: red; box-shadow: 0 0 40px red; }
         
-        /* پروفیشنل سائبر ڈیزائن */
-        .cyber-card { 
-            max-width: 600px; margin: 50px auto; padding: 40px; 
-            border: 2px solid var(--cyan); border-radius: 20px; 
-            background: rgba(10,10,10,0.9); box-shadow: 0 0 40px var(--cyan);
-            text-align: center; backdrop-filter: blur(10px);
-        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        /* ویڈیو کال ونڈو */
-        .comm-hub { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;
-        }
-        .video-box { 
-            height: 200px; background: #000; border: 2px solid var(--neon); 
-            border-radius: 15px; position: relative; overflow: hidden;
-        }
-        .video-box::before { content: "LIVE"; color: red; position: absolute; top: 10px; left: 10px; font-weight: bold; animation: blink 1s infinite; }
-
-        /* ٹائپنگ اور چیٹ سسٹم */
-        .chat-system { 
-            background: var(--sec); padding: 15px; border-radius: 15px; border-bottom: 4px solid var(--gold);
-            height: 300px; overflow-y: auto; text-align: left; direction: ltr; font-family: monospace;
-        }
-
-        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #000; color: white; }
-        .btn-main { background: var(--cyan); color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-main:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--neon); }
-
-        @keyframes blink { 50% { opacity: 0; } }
+        /* آفس ڈیش بورڈ */
+        .office-frame { width: 90%; height: 90%; background: #0a0a0a; border: 2px solid var(--gold); border-radius: 20px; padding: 20px; box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
+        .header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        .comm-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .video-box { height: 250px; background: #000; border: 1px solid var(--neon); border-radius: 10px; position: relative; }
+        .chat-area { background: #111; height: 250px; padding: 15px; border-radius: 10px; font-family: monospace; color: var(--neon); overflow-y: auto; }
     </style>
 </head>
 <body>
 
-    <div id="reg-page" class="cyber-card">
-        <h1 style="color: var(--gold); letter-spacing: 5px;">COMMANDO LOGIN</h1>
-        <input type="text" id="u-email" placeholder="آپ کی Gmail (مالک کے لیے مخصوص)">
-        <input type="text" id="u-name" placeholder="آپ کا نام">
-        <select id="u-role">
-            <option value="worker">میں ورکر ہوں (Worker)</option>
-            <option value="dealer">میں ڈیلر ہوں (Dealer)</option>
-        </select>
-        <button class="btn-main" onclick="accessSystem()">سسٹم میں داخل ہوں ➔</button>
+    <div id="voice-gate" class="mic-gate">
+        <h1 id="status-text" style="color: var(--cyan);">سسٹم لاک ہے</h1>
+        <p>اپنا نام پکاریں (Voice Command)</p>
+        <div id="mic-btn" class="mic-icon" onclick="startListening()">🎤</div>
+        <p style="font-size: 12px; color: #444;">صرف مجاز کمانڈوز کے لیے</p>
     </div>
 
-    <div id="owner-dash" class="hidden" style="padding: 30px;">
-        <div style="background: var(--sec); padding: 20px; border-bottom: 3px solid var(--gold); display: flex; justify-content: space-between;">
-            <h2 style="color: var(--gold);">🔱 البرکات کنٹرول سینٹر</h2>
-            <div style="color: var(--neon);">کنکشن: انکرپٹڈ 🛡️</div>
+    <div id="master-office" class="office-frame hidden">
+        <div class="header">
+            <h2 style="color: var(--gold);">🔱 البرکات کمانڈو آفس</h2>
+            <div id="user-info" style="color: var(--neon);">مالک: لاگ ان ہے</div>
         </div>
-        <div class="comm-hub">
-            <div class="video-box"></div>
-            <div class="chat-system" id="owner-logs">> سسٹم تیار ہے...<br>> گلوبل ٹریفک مانیٹر ہو رہی ہے...</div>
-        </div>
-        <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-            <div class="cyber-card" style="margin:0; padding:20px;"><h4>ریونیو</h4><h2 style="color: var(--neon);">$540</h2></div>
-            <div class="cyber-card" style="margin:0; padding:20px;"><h4>کلائنٹس</h4><h2 style="color: var(--cyan);">138</h2></div>
-            <div class="cyber-card" style="margin:0; padding:20px;"><h4>ٹریفک</h4><h2 style="color: var(--gold);">GLOBAL</h2></div>
-        </div>
-    </div>
-
-    <div id="user-dash" class="hidden" style="padding: 30px;">
-        <div style="background: var(--sec); padding: 20px; border-radius: 15px; border-left: 10px solid var(--cyan);">
-            <h2 id="welcome-text">خوش آمدید</h2>
-            <p>آپ کا ہائی ٹیک ہوم پیج فعال ہے۔</p>
-        </div>
-        <div class="comm-hub">
-            <div class="video-box"><p style="margin: 80px 20px; color: #444;">ویڈیو کال کا انتظار ہے...</p></div>
-            <div class="chat-system">
-                <input type="text" id="chat-in" placeholder="ٹائپ کریں اور میسج بھیجیں..." style="border-color: var(--gold);">
-                <div id="chat-out">> نیٹ ورک سے جڑ رہے ہیں...</div>
+        
+        <div class="comm-box">
+            <div class="video-box">
+                <div style="position: absolute; top: 10px; left: 10px; color: red; font-size: 10px; animation: blink 1s infinite;">● LIVE</div>
+                <p style="text-align: center; margin-top: 100px; color: #333;">ویڈیو سسٹم فعال ہے</p>
+            </div>
+            
+            <div class="chat-area" id="logs">
+                [SYSTEM] وائس ریکگنیشن کامیاب... <br>
+                [SECURE] ہیکنگ پروٹیکشن فعال ہے... <br>
+                [READY] آپ کی فائلیں اپ لوڈ کے لیے تیار ہیں...
             </div>
         </div>
+
+        <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--cyan);"><h4>کلائنٹ لنکس</h4><p>12 ایکٹیو</p></div>
+            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--gold);"><h4>ورکر ڈیٹا</h4><p>138 میسجز</p></div>
+            <div style="background: #111; padding: 15px; border-radius: 10px; border-left: 5px solid var(--neon);"><h4>سیکیورٹی</h4><p>اعلیٰ ترین</p></div>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
-        const OWNER_GMAIL = "huassinkhankhan792@gmail.com"; // آپ کی جی میل
+        // مجاز ناموں کی لسٹ
+        const ALLOWED_NAMES = ["affan jahan", "aman chauhan", "talha husain", "abbas", "harish"];
 
-        function accessSystem() {
-            const email = document.getElementById('u-email').value;
-            const name = document.getElementById('u-name').value;
-            const role = document.getElementById('u-role').value;
+        function startListening() {
+            const mic = document.getElementById('mic-btn');
+            const status = document.getElementById('status-text');
+            
+            // وائس ریکگنیشن شروع کرنا
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US'; // یا 'ur-PK' بھی کر سکتے ہیں
 
-            document.getElementById('reg-page').classList.add('hidden');
+            mic.classList.add('listening');
+            status.innerText = "سن رہا ہوں...";
+            status.style.color = "red";
 
-            // مالک کا چیک
-            if(email.toLowerCase() === OWNER_GMAIL.toLowerCase()) {
-                document.getElementById('owner-dash').classList.remove('hidden');
-                speak("خوش آمدید مالک۔ البرکات کمانڈو حب اب آپ کے کنٹرول میں ہے۔");
-            } else {
-                // ورکر یا ڈیلر کے لیے
-                document.getElementById('user-dash').classList.remove('hidden');
-                document.getElementById('welcome-text').innerText = `خوش آمدید، ${name} (${role})`;
-                speak(`خوش آمدید ${name}۔ آپ کا ${role} پورٹل تیار ہے۔`);
-            }
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const voiceCommand = event.results[0][0].transcript.toLowerCase();
+                mic.classList.remove('listening');
+                
+                let matched = false;
+                ALLOWED_NAMES.forEach(name => {
+                    if (voiceCommand.includes(name)) matched = true;
+                });
+
+                if (matched) {
+                    openOffice(voiceCommand);
+                } else {
+                    status.innerText = "Access Denied!";
+                    status.style.color = "red";
+                    speak("رسائی کی اجازت نہیں ہے۔ غلط نام۔");
+                }
+            };
+
+            recognition.onerror = function() {
+                mic.classList.remove('listening');
+                status.innerText = "دوبارہ کوشش کریں";
+            };
+        }
+
+        function openOffice(name) {
+            document.getElementById('voice-gate').classList.add('hidden');
+            document.getElementById('master-office').classList.remove('hidden');
+            document.getElementById('user-info').innerText = "مالک: " + name.toUpperCase();
+            speak("خوش آمدید مالک۔ آپ کا آفس اب کھلا ہے۔");
+            
+            // سسٹم لاگز اپ ڈیٹ کرنا
+            const logs = document.getElementById('logs');
+            logs.innerHTML += `<br> [ACCESS] ${name} نے سسٹم کھول لیا۔`;
         }
 
         function speak(text) {
