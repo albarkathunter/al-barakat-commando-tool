@@ -2,114 +2,115 @@
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AL-BARAKAT GLOBAL | COMMANDO HUB</title>
+    <title>AL-BARAKAT COMMANDO | THE ULTIMATE HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <style>
-        :root { --gold: #ffd700; --cyan: #00d2ff; --bg: #000; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root { --gold: #ffd700; --cyan: #00d2ff; --neon: #00ff88; --dark: #000; --sec: #111; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
         .hidden { display: none !important; }
         
-        /* سائن اپ کارڈ */
-        .auth-box { max-width: 500px; margin: 100px auto; padding: 40px; border: 2px solid var(--cyan); border-radius: 20px; text-align: center; box-shadow: 0 0 20px var(--cyan); }
-        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--cyan); background: #111; color: white; }
-        .btn-enter { background: var(--cyan); color: black; font-weight: bold; cursor: pointer; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); }
+        /* پروفیشنل سائبر ڈیزائن */
+        .cyber-card { 
+            max-width: 600px; margin: 50px auto; padding: 40px; 
+            border: 2px solid var(--cyan); border-radius: 20px; 
+            background: rgba(10,10,10,0.9); box-shadow: 0 0 40px var(--cyan);
+            text-align: center; backdrop-filter: blur(10px);
+        }
 
-        /* ڈیش بورڈ ڈیزائن (تصویر کے مطابق) */
-        .dash-container { padding: 20px; }
-        .header { background: #111; padding: 15px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .stat-card { background: #0a0a0a; padding: 30px; border-radius: 15px; border-left: 5px solid var(--cyan); }
-        .val { font-size: 40px; font-weight: bold; color: var(--cyan); }
+        /* ویڈیو کال ونڈو */
+        .comm-hub { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;
+        }
+        .video-box { 
+            height: 200px; background: #000; border: 2px solid var(--neon); 
+            border-radius: 15px; position: relative; overflow: hidden;
+        }
+        .video-box::before { content: "LIVE"; color: red; position: absolute; top: 10px; left: 10px; font-weight: bold; animation: blink 1s infinite; }
+
+        /* ٹائپنگ اور چیٹ سسٹم */
+        .chat-system { 
+            background: var(--sec); padding: 15px; border-radius: 15px; border-bottom: 4px solid var(--gold);
+            height: 300px; overflow-y: auto; text-align: left; direction: ltr; font-family: monospace;
+        }
+
+        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #000; color: white; }
+        .btn-main { background: var(--cyan); color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-main:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--neon); }
+
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div id="signup-page" class="auth-box">
-        <h2 style="color: var(--cyan);">ACCESS GRANTED</h2>
-        <input type="text" id="user-name" placeholder="آپ کا نام">
-        <input type="tel" id="phone">
-        <select id="user-role">
+    <div id="reg-page" class="cyber-card">
+        <h1 style="color: var(--gold); letter-spacing: 5px;">COMMANDO LOGIN</h1>
+        <input type="text" id="u-email" placeholder="آپ کی Gmail (مالک کے لیے مخصوص)">
+        <input type="text" id="u-name" placeholder="آپ کا نام">
+        <select id="u-role">
             <option value="worker">میں ورکر ہوں (Worker)</option>
             <option value="dealer">میں ڈیلر ہوں (Dealer)</option>
-            <option value="owner">خفیہ رسائی (Owner Only)</option>
         </select>
-        <button class="btn-enter" onclick="routeUser()">ENTER THE SYSTEM ➔</button>
+        <button class="btn-main" onclick="accessSystem()">سسٹم میں داخل ہوں ➔</button>
     </div>
 
-    <div id="worker-page" class="dash-container hidden">
-        <div class="header"><h3>ورکر ڈیش بورڈ - البرکات</h3><button onclick="location.reload()">لاگ آؤٹ</button></div>
-        <div class="stat-card" style="margin-top: 50px;">
-            <h3>خوش آمدید، <span id="w-name"></span></h3>
-            <p>آپ کے آج کے ٹاسک: 0</p>
-            <p style="color: var(--gold);">اسٹیٹس: نئے آرڈرز کا انتظار ہے...</p>
+    <div id="owner-dash" class="hidden" style="padding: 30px;">
+        <div style="background: var(--sec); padding: 20px; border-bottom: 3px solid var(--gold); display: flex; justify-content: space-between;">
+            <h2 style="color: var(--gold);">🔱 البرکات کنٹرول سینٹر</h2>
+            <div style="color: var(--neon);">کنکشن: انکرپٹڈ 🛡️</div>
         </div>
-    </div>
-
-    <div id="dealer-page" class="dash-container hidden">
-        <div class="header"><h3>ڈیلر پینل - سروسز</h3><button onclick="location.reload()">لاگ آؤٹ</button></div>
-        <div class="stat-grid">
-            <div class="stat-card"><h4>سوشل مارکیٹنگ</h4><button>آرڈر کریں</button></div>
-            <div class="stat-card"><h4>گیسٹ پوسٹنگ</h4><button>آرڈر کریں</button></div>
-            <div class="stat-card"><h4>ڈیٹا انٹری</h4><button>آرڈر کریں</button></div>
+        <div class="comm-hub">
+            <div class="video-box"></div>
+            <div class="chat-system" id="owner-logs">> سسٹم تیار ہے...<br>> گلوبل ٹریفک مانیٹر ہو رہی ہے...</div>
         </div>
-    </div>
-
-    <div id="owner-page" class="dash-container hidden">
-        <div class="header" style="border-color: var(--gold);">
-            <div style="color: var(--gold);">وقت: <span id="time"></span></div>
-            <div>کلاؤڈ ہنٹنگ ایکٹیو 🟢</div>
-        </div>
-        <div class="stat-grid">
-            <div class="stat-card" style="border-color: var(--cyan);"><h4>اصلی کلائنٹس</h4><div class="val">12</div></div>
-            <div class="stat-card" style="border-color: var(--gold);"><h4>کل میسجز</h4><div class="val">138</div></div>
-            <div class="stat-card"><h4>روزانہ کی رپورٹ</h4><p>آج کے ای میلز: 69</p></div>
-        </div>
-        <div class="stat-card" style="margin-top: 20px; border-color: #00ff88;">
-            <h4>🎯 خودکار الفاظ کا پہرہ</h4>
-            <p>گوگل اور فیس بک سے نئے الفاظ سیکھے جا رہے ہیں...</p>
+        <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div class="cyber-card" style="margin:0; padding:20px;"><h4>ریونیو</h4><h2 style="color: var(--neon);">$540</h2></div>
+            <div class="cyber-card" style="margin:0; padding:20px;"><h4>کلائنٹس</h4><h2 style="color: var(--cyan);">138</h2></div>
+            <div class="cyber-card" style="margin:0; padding:20px;"><h4>ٹریفک</h4><h2 style="color: var(--gold);">GLOBAL</h2></div>
         </div>
     </div>
 
+    <div id="user-dash" class="hidden" style="padding: 30px;">
+        <div style="background: var(--sec); padding: 20px; border-radius: 15px; border-left: 10px solid var(--cyan);">
+            <h2 id="welcome-text">خوش آمدید</h2>
+            <p>آپ کا ہائی ٹیک ہوم پیج فعال ہے۔</p>
+        </div>
+        <div class="comm-hub">
+            <div class="video-box"><p style="margin: 80px 20px; color: #444;">ویڈیو کال کا انتظار ہے...</p></div>
+            <div class="chat-system">
+                <input type="text" id="chat-in" placeholder="ٹائپ کریں اور میسج بھیجیں..." style="border-color: var(--gold);">
+                <div id="chat-out">> نیٹ ورک سے جڑ رہے ہیں...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
-        // فون نمبر لائبریری
-        const iti = window.intlTelInput(document.querySelector("#phone"), {
-            initialCountry: "pk",
-            separateDialCode: true,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-        });
+        const OWNER_GMAIL = "huassinkhankhan792@gmail.com"; // آپ کی جی میل
 
-        function routeUser() {
-            const name = document.getElementById('user-name').value;
-            const role = document.getElementById('user-role').value;
+        function accessSystem() {
+            const email = document.getElementById('u-email').value;
+            const name = document.getElementById('u-name').value;
+            const role = document.getElementById('u-role').value;
 
-            if(!name) { alert("براہ کرم نام درج کریں"); return; }
+            document.getElementById('reg-page').classList.add('hidden');
 
-            // سائن اپ پیج چھپائیں
-            document.getElementById('signup-page').classList.add('hidden');
-
-            // رول کے حساب سے پیج دکھائیں
-            if(role === 'worker') {
-                document.getElementById('worker-page').classList.remove('hidden');
-                document.getElementById('w-name').innerText = name;
-            } else if(role === 'dealer') {
-                document.getElementById('dealer-page').classList.remove('hidden');
-            } else if(role === 'owner') {
-                // مالک کے لیے خفیہ کوڈ پوچھیں
-                const code = prompt("سیکیورٹی کوڈ دیں:");
-                if(code === "786") {
-                    document.getElementById('owner-page').classList.remove('hidden');
-                } else {
-                    alert("غلط کوڈ! آپ کو ڈیلر پیج پر بھیجا جا رہا ہے۔");
-                    document.getElementById('dealer-page').classList.remove('hidden');
-                }
+            // مالک کا چیک
+            if(email.toLowerCase() === OWNER_GMAIL.toLowerCase()) {
+                document.getElementById('owner-dash').classList.remove('hidden');
+                speak("خوش آمدید مالک۔ البرکات کمانڈو حب اب آپ کے کنٹرول میں ہے۔");
+            } else {
+                // ورکر یا ڈیلر کے لیے
+                document.getElementById('user-dash').classList.remove('hidden');
+                document.getElementById('welcome-text').innerText = `خوش آمدید، ${name} (${role})`;
+                speak(`خوش آمدید ${name}۔ آپ کا ${role} پورٹل تیار ہے۔`);
             }
         }
 
-        // لائیو ٹائم
-        setInterval(() => {
-            document.getElementById('time').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'ur-PK';
+            window.speechSynthesis.speak(msg);
+        }
     </script>
 </body>
 </html>
